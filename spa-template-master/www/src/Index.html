@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <script type="text/javascript" src="https://unpkg.com/mathjs@5.0.4/dist/math.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.com/libraries/mathjs"></script>
+  <script type="text/javascript" src="https://cdn.plot.ly/plotly-1.35.2.min.js"></script>
+  <title>Math learn</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css?family=Modern+Antiqua" rel="stylesheet">
+</head>
+<body>
+
+<div class="like" ><i class="fas fa-check-circle"></i></div>
+<div class="container">
+  <div class="header">
+    <i class="fas fa-bars button-burger-menu" onclick="showSideMenu(event)"></i>
+    <h1> <i class="fas fa-graduation-cap"></i> math learn</h1>
+  </div>
+  <div class="side-menu hidden" id="side-menu">
+    <span style="flex-grow: 2"></span>
+    <span>1.линейная функция</span>
+    <span>2.линейная функция</span>
+    <span>3.линейная функция</span>
+    <span>4.линейная функция</span>
+    <span>5.линейная функция</span>
+    <span>6.линейная функция</span>
+    <span>7.линейная функция</span>
+    <span>8.линейная функция</span>
+    <span style="flex-grow: 5"></span>
+  </div>
+  <div class="columns">
+    <div class="column-one">
+      <div class="area"></div>
+    </div>
+    <div class="button-resize"></div>
+    <div class="column-two">
+      <div class="container-left" id="input-form">
+        <div class="line-input" id="line-input">
+                    <span style="background: #f9f9f9;display: inline-block;height: 100%;position: absolute;top:0;left:0;">
+                        <span class ='data-number-input' style="font-size: 10px;">1</span>
+                    </span>
+          <span class="notification-img"></span>
+          <span class="inputField"></span>
+          <span class="btn-delete-input"><i class="fas fa-times"></i></span>
+        </div>
+        <div class="line-input btn-addNewField" id="btn-add-item">
+                    <span>
+                        <span class ='data-number-input' style="font-size: 10px;text-align: left;">2</span>
+                    </span>
+        </div>
+
+      </div>
+      <div class="container-right"><div id="plot"></div></div>
+      <div id="calculator">
+        <div class="calc-column">
+          <div class="calc-row">
+            <div class="button-keypad" data-key-value="x"><var>x</var></div>
+            <div class="button-keypad" data-key-value="y"><var>y</var></div>
+            <div class="button-keypad" data-key-value="("><span>&#40;</span></div>
+            <div class="button-keypad" data-key-value=")"><span>&#41;</span></div>
+
+          </div>
+          <div class="calc-row">
+            <div class="button-keypad" data-key-value="$^2"><var>a<sup>2</sup></var></div>
+            <div class="button-keypad" data-key-value="$|a|"><var>&#124;a&#124;</var></div>
+          </div>
+          <div class="calc-row">
+            <div class="button-keypad" data-key-value="$left"><span>&#8592;</span></div>
+            <div class="button-keypad" data-key-value="$right"><span>&#8594;</span></div>
+
+          </div>
+          <div class="calc-row">
+            <div class="button-keypad" data-key-value="$backspace"><i class="fas fa-backspace"></i></div>
+            <div class="button-keypad" data-key-value="$enter"><span>&#8629;</span></div>
+          </div>
+        </div>
+        <div style="flex-grow: 0.5;"></div>
+        <div class="calc-column">
+          <div class="calc-row">
+            <div class="button-keypad" data-key-value="7"><span>7</span></div>
+            <div class="button-keypad" data-key-value="8"><span>8</span></div>
+            <div class="button-keypad" data-key-value="9"><span>9</span></div>
+            <div class="button-keypad" data-key-value="/"><span>&#247;</span></div>
+          </div>
+          <div class="calc-row">
+            <div class="button-keypad" data-key-value="4"><span>4</span></div>
+            <div class="button-keypad" data-key-value="5"><span>5</span></div>
+            <div class="button-keypad" data-key-value="6"><span>6</span></div>
+            <div class="button-keypad" data-key-value="*"><span>&#215;</span></div>
+          </div>
+          <div class="calc-row">
+            <div class="button-keypad" data-key-value="1"><span>1</span></div>
+            <div class="button-keypad" data-key-value="2"><span>2</span></div>
+            <div class="button-keypad" data-key-value="3"><span>3</span></div>
+            <div class="button-keypad" data-key-value="-"><span>&#45;</span></div>
+          </div>
+          <div class="calc-row">
+            <div class="button-keypad" data-key-value="0"><span>0</span></div>
+            <div class="button-keypad" data-key-value="."><span>&#46;</span></div>
+            <div class="button-keypad" data-key-value="="><span>&#61;</span></div>
+            <div class="button-keypad" data-key-value="+"><span>&#43;</span></div>
+          </div>
+        </div>
+
+      </div>
+      <div id="btn-calculator" class="button-keypad-toggle open" onclick="calculatorHidden(event)"><i class="far fa-keyboard"></i><i class="fas fa-sort-up"></i></div>
+    </div>
+
+
+  </div>
+  <div class="footer"><p>Copyright © 2018. Все права защищены.</p></div>
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', theory);
+
+    const area = document.querySelector('.area');
+    let page = 0;
+    const path = document.location.href;
+
+    function theory() {
+        const xhr = new XMLHttpRequest;
+        xhr.open('GET', ''+page+'.json', true);
+        xhr.send();
+        xhr.onreadystatechange = function() {
+            if(this.readyState === 4 && this.status === 200) {
+                let text = JSON.parse(this.responseText);
+                parseText(text);
+            }
+        };
+    }
+
+    function checkAnswer() {
+        const xhr = new XMLHttpRequest;
+        xhr.open('GET', ''+page+'.json', true);
+        xhr.send();
+        xhr.onreadystatechange = function() {
+            if(this.readyState === 4 && this.status === 200) {
+                let text = JSON.parse(this.responseText);
+                parseText(text);
+            }
+        };
+
+    }
+
+    function parseText(text) {
+        let output = '';
+        let arr = text["theory"].split('\n');
+        let equations = text["equation"];
+        output += '<h2>'+text["title"]+'</h2>';
+
+        arr.forEach(function(i){
+            output += '<p>'+i+'</p>';
+        });
+        area.innerHTML = output;
+        let button = document.createElement('input');
+        button.value = "ДАЛЕЕ";
+        button.id = 'btn-next';
+        button.type = 'button';
+        area.appendChild(button);
+        button.addEventListener('click', checkAnswer);
+        page ++;
+        if (page === 8) {
+            page = 0;
+        }
+    }
+
+
+    const keypad = document.getElementById('calculator'); //кнопка скрыть показать экранную клавиатуру
+
+    function calculatorHidden(e) {
+        const buttonKeypad = e.currentTarget;
+        keypad.classList.toggle('calculator-visible');
+        buttonKeypad.classList.toggle('close');
+        setTimeout(function () {
+            let icon = buttonKeypad.querySelector('.fas');
+            icon.classList.toggle('fa-sort-down');
+            icon.classList.toggle('fa-sort-up');
+            buttonKeypad.classList.toggle('open');
+        },0)
+    }
+
+    let buttonResize = null;
+    let columnLeft = null;
+    let columnRight = null;
+    let cursorCoordX = 0;
+    let flexBoxValueColumnLeft = 0;
+    let flexBoxValueColumnRight = 0;
+    const columns = document.querySelector('.columns');
+
+    columns.ondragstart = function (){return false;};
+
+    columns.onmousedown = function startResizeColumns(e) {
+
+        if(e.target.classList.contains('button-resize')){
+            buttonResize = e.target;
+            columnLeft = buttonResize.previousElementSibling;
+            columnRight = buttonResize.nextElementSibling;
+            flexBoxValueColumnLeft = parseFloat(window.getComputedStyle(columnLeft).webkitFlexGrow);
+            flexBoxValueColumnRight = parseFloat(window.getComputedStyle(columnRight).webkitFlexGrow);
+            cursorCoordX = e.clientX;
+            document.body.style.cursor = 'col-resize';
+        }
+        else{
+            return false;
+        }
+
+    };
+    //кнопка изменения размеров блоков
+    columns.onmousemove = function resizeColumns(e) {
+
+        if (buttonResize) {
+            if(flexBoxValueColumnLeft + (e.clientX - cursorCoordX)/850 < 0.06588275882352941 || flexBoxValueColumnLeft + (e.clientX - cursorCoordX)/850 > 1.257){
+                stopResize();
+                return false;
+            }
+            columnLeft.setAttribute('style', '-webkit-box-flex: ' + ( flexBoxValueColumnLeft + (e.clientX - cursorCoordX) / 850) + '; flex: ' + (flexBoxValueColumnLeft + (e.clientX - cursorCoordX) / 850) + ' 1 0%');
+            columnRight.setAttribute('style', '-webkit-box-flex: ' + ( flexBoxValueColumnRight - (e.clientX - cursorCoordX) / 850) + '; flex: ' + (flexBoxValueColumnRight - (e.clientX - cursorCoordX) / 850) + ' 1 0%');
+        }
+        else return false;
+
+    };
+
+    columns.onmouseup = stopResize();
+
+    function stopResize() {
+        columnLeft = null;
+        columnRight = null;
+        buttonResize = null;
+        cursorCoordX = 0;
+        document.body.style.cursor = 'auto';
+    }
+    //кнопка показать меню
+
+    const menu = document.getElementById('side-menu');
+
+    function showSideMenu(e){
+        let btn = null;
+
+        if(!e){
+            btn = document.querySelector('.fa-times');
+        }
+        else{
+            btn = e.target;
+        }
+
+        menu.classList.toggle('hidden');
+        const widthMenu = menu.offsetWidth;
+        btn.setAttribute('style', 'transform:translateX('+ (widthMenu - btn.offsetWidth) +'px);');
+        btn.classList.toggle('fa-bars');
+        btn.classList.toggle('fa-times');
+    }
+    //показать галочку за правильное решшение;
+    function showLike() {
+        const like = document.querySelector('.like');
+        like.style.display = 'flex';
+        setTimeout(function () {
+            like.querySelector('i').style.fontSize = '800px';
+        },10);
+        setTimeout(function () {
+            like.querySelector('i').style.fontSize = '80px';
+            like.style.display = 'none';
+        },1500);
+    }
+
+
+
+
+
+</script>
+<script type="module" src="js/input/index.js"></script>
+<script type="module" src="./js/plot/indexPlot.js"></script>
+</body>
+</html>
