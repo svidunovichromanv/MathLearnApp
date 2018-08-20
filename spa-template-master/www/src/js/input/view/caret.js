@@ -2,16 +2,9 @@ export class Caret{
     constructor() {
         let self = this;
         this.value = document.createElement('strong');
-        this.value.id = 'caret';
+        this.value.innerHTML ='&#8203';
         function flash() {
-
-            if (self.value.textContent) {
-                self.value.textContent = '';
-            }
-            else{
-                self.value.textContent = '|';
-            }
-
+            self.value.classList.toggle('blink');
             if (self.timer) {
                 clearTimeout(self.timer);
             }

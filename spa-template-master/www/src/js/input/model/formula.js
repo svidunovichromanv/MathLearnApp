@@ -7,104 +7,88 @@ import { Validator } from './validator.js';
     constructor(validator) {
         super();
         this.data = [{'line-input':[]}];
-        this.maxlength = 18;
-        this.id = Date.now();
+        this.maxlength = 15;
         this.stateData = false;
-        this.isPower = false;
-        this.isNumber = false;
         if (validator instanceof Validator) {
             this.validator = validator;
         }
     }
 
-    getStateData(){
-        return this.stateData;
-    }
+     getItem(id) {
+         for (let i = 0; i < this.data.length; i++) {
+             for (let k in this.data[i]) {
+                 if (k === id) {
+                     return this.data[i][k];
+                 }
+             }
+         }
+     }
 
-    validateItem(item) {
-        this.validator.validate(item);
+
+    validateData(data) {
+        this.validator.validate(data);
         this.stateData = this.validator.validItem;
     }
 
-    addItem(item) {
-        if(this.data.length > this.maxlength){
-            return false;   //проверяем чтобы не было переполнение массива
-        }
-        this.validateItem(item); //проверяем введенные данные и если они true добавляем в массив
-
+    addDataInItem(id,index, data) {
+        const item = this.getItem(id);
+        if(item.length >= this.maxlength)return false;
+        this.validateData(data);   //проверяем введенные данные и если они true добавляем в массив
         if(this.stateData){
-            if(this.isNumber && (/[0-9]/.test(item))){
-                this.data[this.data.length -1] +=  '' +item;
-                return this.generateWrapForItem(item); //генерируем узел для HTML и возвращаем в контроллер
+            if(index === item.length){
+                item.push(data);
             }
             else{
-                this.data.push(item);
-                return this.generateWrapForItem(item); //генерируем узел для HTML и возвращаем в контроллер
+                console.log(item);
+                let newArray = [];
+                for(let i=0;i<index;i++){
+                    newArray.push(item[i]);
+                }
+                newArray.push(data);
+                for(let i = index;i< item.length;i++){
+                    newArray.push(item[i]);
+                }
+                this.changeData(id, newArray);
             }
 
+            return true;
         }
         else return false;
     }
+     changeData(id, newArray) {
+         for (let i = 0; i < this.data.length; i++) {
+             for (let k in this.data[i]) {
+                 if (k === id) {
+                     this.data.splice(this.data[i], 1);
+                     let newData = {};
+                     newData[id] = newArray;
+                     this.data.push(newData);
+                     console.log(this.data);
+                 }
+             }
+         }
+     }
 
-    generateWrapForItem(item){
-        const letters = /[a-z]/;
-        const digit = /[0-9]/;
-        const signMultiply =  /\*/;
-        const signPower = /\^/;
-        let node = null;
-        if(this.isPower && digit.test(item)){
-            this.isPower = false;
-            node = document.createElement('sup');
-            node.textContent = item;
-        }
-        else if(letters.test(item) ){
-            this.isNumber = false;
-            node = document.createElement('var');
-            node.textContent = item + ' ';
-        }
-        else if(signMultiply.test(item)){
-            this.isNumber = false;
-            node = document.createElement('sup');
-            node.textContent = item + ' ';
 
-        }
-        else if(signPower.test(item)){
-            this.isPower = true;
-            this.isNumber = false;
-        }
-        else if(digit.test(item)){
-            node = document.createElement('span');
-            node.textContent = item + ' ';
-            this.isNumber = true;
-        }
-        else{
-            this.isNumber = false;
-            node = document.createElement('span');
-            node.textContent = item + ' ';
-        }
-        if(node){
-            node.setAttribute('data-index', this.data.length-1);
-        }
-        return node;
-    }
+    deleteDataFromItem(obj) {
+        const id = Object.keys(obj)[0];
+        const index = obj[id];
+        const item = this.getItem(id);
 
-    deleteItem(node) {
-        if(this.data.length > 0){
-            let nodeIndex = parseInt(node.getAttribute('data-index'));
+        if(item.length > 0){
+            //let nodeIndex = parseInt(node.getAttribute('data-index'));
+            item.splice(index,1);
 
-            this.data.splice(nodeIndex,1);
         }
 
     }
 
-    addNewInput(data){
+    addItem(data){
         this.data.push(data);
-        console.log('добавился новый массив, данные формулы обновились');
-        console.log(this.data);
     }
 
 
-    deleteInput(id) {
+    deleteItem(id) {
         for(let i = 0;i < this.data.length;i++){
             for(let k in this.data[i]){
                 if(k === id){
@@ -113,9 +97,12 @@ import { Validator } from './validator.js';
                 }
             }
         }
-        console.log('удалили массив, данные формулы обновились');
-        console.log(this.data);
     }
+     cleanItem(id){
+         const item = this.getItem(id);
+         item.splice(0, item.length);
+
+     }
 
 }
 
