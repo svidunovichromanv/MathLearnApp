@@ -1,8 +1,4 @@
-const wrapper = document.querySelector('.columns')
-    var one = document.querySelector('.column-one');
-    const resizeBtn = document.querySelector('.button-resize');
     document.addEventListener('DOMContentLoaded', theory);
-
     const area = document.querySelector('.area');
     let page = 0;
     const path = document.location.href;
@@ -80,56 +76,42 @@ const wrapper = document.querySelector('.columns')
         },0)
     }
 
-    let buttonResize = null;
-    let columnLeft = null;
-    let columnRight = null;
-    let cursorCoordX = 0;
-    let flexBoxValueColumnLeft = 0;
-    let flexBoxValueColumnRight = 0;
-    const columns = document.querySelector('.columns');
+//resizer
+    const v1 = document.querySelector('.column-one');
+    const v2 = document.querySelector('.column-two');
+    const r1_lr_handle = document.querySelector('.button-resize');
 
-    columns.ondragstart = function (){return false;};
+    var mouseStartPosition = {};
+    var v1StartWidth;
+    var v2StartWidth;
 
-    columns.onmousedown = function startResizeColumns(e) {
+    r1_lr_handle.addEventListener("mousedown", mousedownR1RL);
 
-        if(e.target.classList.contains('button-resize')){
-            buttonResize = e.target;
-            columnLeft = buttonResize.previousElementSibling;
-            columnRight = buttonResize.nextElementSibling;
-            flexBoxValueColumnLeft = parseFloat(window.getComputedStyle(columnLeft).webkitFlexGrow);
-            flexBoxValueColumnRight = parseFloat(window.getComputedStyle(columnRight).webkitFlexGrow);
-            cursorCoordX = e.clientX;
-            document.body.style.cursor = 'col-resize';
-        }
-        else{
-            return false;
-        }
+function mousedownR1RL(e) {
+  // get v1 width
+  v1StartWidth = v1.offsetWidth;
+  v2StartWidth = v2.offsetWidth;
+  // get mouse position
+  mouseStartPosition.x = e.pageX;
+  mouseStartPosition.y = e.pageY;
 
-    };
-//кнопка изменения размеров блоков
-    columns.onmousemove = function resizeColumns(e) {
 
-        if (buttonResize) {
-            if(flexBoxValueColumnLeft + (e.clientX - cursorCoordX)/850 < 0.06588275882352941 || flexBoxValueColumnLeft + (e.clientX - cursorCoordX)/850 > 1.257){
-                stopResize();
-                return false;
-            }
-            columnLeft.setAttribute('style', '-webkit-box-flex: ' + ( flexBoxValueColumnLeft + (e.clientX - cursorCoordX) / 850) + '; flex: ' + (flexBoxValueColumnLeft + (e.clientX - cursorCoordX) / 850) + ' 1 0%');
-            columnRight.setAttribute('style', '-webkit-box-flex: ' + ( flexBoxValueColumnRight - (e.clientX - cursorCoordX) / 850) + '; flex: ' + (flexBoxValueColumnRight - (e.clientX - cursorCoordX) / 850) + ' 1 0%');
-        }
-        else return false;
+  // add listeners for mousemove, mouseup
+  window.addEventListener("mousemove", mousemove);
+  window.addEventListener("mouseup", mouseup);
+}
 
-    };
+function mousemove(e) {
+  // console.log('mouse move... x:', e.pageX, 'y:', e.pageY);
+  var diff = mouseStartPosition.x - e.pageX;
+    v1.style.flexBasis = v1StartWidth + -1*diff + 'px';
+    v2.style.flexBasis = v2StartWidth + diff + 'px';
+}
 
-    columns.onmouseup = stopResize();
-
-        function stopResize() {
-            columnLeft = null;
-            columnRight = null;
-            buttonResize = null;
-            cursorCoordX = 0;
-            document.body.style.cursor = 'auto';
-    }
+function mouseup(e) {
+  window.removeEventListener("mousemove", mousemove);
+  window.removeEventListener("mouseup", mouseup);
+}
 
 
 
