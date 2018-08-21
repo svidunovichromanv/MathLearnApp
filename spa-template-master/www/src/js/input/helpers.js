@@ -1,11 +1,14 @@
 
 export function find(array, value) {
-
-    for (let i = 0; i < array.length; i++) {
-        if (array[i].id) return true;
-        //if (array[i].id === value) return true
-    }
-    return false;
+    let result = false;
+    array.forEach(function (item) {
+        if(item.id){
+            for(let i = 0;i< value.length;i++){
+                if(item.id === value[i])result = true;
+            }
+        }
+    });
+    return result;
 }
 
 export class EventEmitter{
@@ -24,6 +27,6 @@ export class EventEmitter{
     }
 }
 
-
-
-
+export function view(data) {
+    console.log(data);
+}

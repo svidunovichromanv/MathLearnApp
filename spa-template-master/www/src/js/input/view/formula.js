@@ -6,107 +6,237 @@ export class FormulaViewInput extends EventEmitter{
         super();
         this.caret = new Caret();
         this.input = document.getElementById('line-input');
+        this.form = document.getElementById('input-form');
+        this.btnCleanInput = this.input.querySelector('.btn-delete-input');
         this.btnAddNewInput = document.getElementById('btn-add-item');
         this.inputField = this.input.querySelector('.inputField');
-
         this.btnAddNewInput.addEventListener('click', this.handleAddNewInput.bind(this));
-
-        document.addEventListener('click', this.handleToggle.bind(this));
+        document.addEventListener('click', this.handleEditingField.bind(this));
         document.addEventListener('keypress', this.handleAddItem.bind(this));
-        document.addEventListener('keydown', this.handleDeleteItem.bind(this));
-        this.numberNextInput = 2;
+        document.addEventListener('keydown', this.handlePressKeypad.bind(this));
+        this.btnCleanInput.addEventListener('click', this.handleCleanInput.bind(this));
+        this.inputField.appendChild(this.caret.value);
     }
-    handleToggle(event){
-        this.emit('toggle', event);
+    handleEditingField(event){
+        this.emit('edit', event);
+    }
+    handleCleanInput(){
+        this.emit('clean', this.input.id);
+    }
+    getNextIndexItem(){
+        let activeField = document.querySelector('.activeField');
+        if(activeField){
+            let inputField = activeField.querySelector('.inputField');
+            let indexElem = inputField.childNodes.length -1;
+            if(this.caret.value.nextElementSibling){
+                indexElem = this.caret.value.nextElementSibling.getAttribute('data-index');
+            }
+            return indexElem;
+        }
+    }
+    recalculateIndicesItems(){
+        let activeField = document.querySelector('.activeField');
+        let inputField = activeField.querySelector('.inputField');
+        let items = inputField.getElementsByTagName('span');
+        for(let i=0;i<items.length;i++){
+            items[i].setAttribute('data-index', ''+i);
+        }
     }
 
-    toggleInput(event){
-        if(event.target.id === 'line-input'){
-            this.input.classList.add('activeField');
-            this.inputField.appendChild(this.caret.value);
+    editField(event) {
+        let activeField = document.querySelector('.activeField');
+        let newActiveField = event.target.parentNode;
+
+        if (newActiveField.classList.contains('line-input')) {
+
+            let inputField = newActiveField.querySelector('.inputField');
+
+            if (activeField) {
+                activeField.classList.remove('activeField');  //снимаем активность с предыдущего поля и убираем каретку
+                activeField.querySelector('.inputField').removeChild((this.caret.value));
+            }
+            newActiveField.classList.add('activeField'); //добавляем активность новому полю и каретку
+            inputField.appendChild(this.caret.value);
         }
-        else if(this.input.classList.contains ( 'activeField' ) && !find(event.path, 'calculator')){
-            this.input.classList.remove('activeField');
-            this.inputField.removeChild(this.caret.value);
+        else if(activeField && !find(event.path, ['input-form','calculator','btn-calculator'])){
+            activeField.classList.remove('activeField');
+            activeField.querySelector('.inputField').removeChild((this.caret.value));
         }
+
     }
+
     handleDeleteInput(event){
-        console.log(event.currentTarget.parentNode.id);
         let id = event.currentTarget.parentNode.id;
         this.emit('delete', id);
     }
 
 
     handleAddItem(event){
-        if(event){
-            let item = event.key;
-            this.emit('keypress', item);
+        let activeField = document.querySelector('.activeField');
+        if(event && activeField){
+            let data = event.key;
+            this.emit('keypress', data);
         }
     }
     handleAddNewInput(){
         this.emit('click');
     }
 
-    handleDeleteItem(event){
-        if(this.caret.value.previousElementSibling){ //проверяем есть ли что удалять
-            let keyCode = event.which;
-            let deletedNode = this.caret.value.previousElementSibling;
-
-            if(keyCode == 8 ){
-                this.emit('keydown', deletedNode);
+    handlePressKeypad(event) {
+        let activeField = document.querySelector('.activeField');
+        let keyCode = event.which;
+        if (activeField) {
+            if (keyCode == 37) {
+                this.emit('keydownArrow', 'left');
             }
+            if (keyCode == 39) {
+                this.emit('keydownArrow', 'right');
+            }
+            if (keyCode == 8) {
+                if (this.caret.value.previousElementSibling) { //проверяем есть ли что удалять
+                    let id = this.form.querySelector('.activeField').id;
+                    let deletedNode = this.caret.value.previousElementSibling;
+                    let index = deletedNode.getAttribute('data-index');
+                    this.emit('keydownBackspace', {[id]: index});
+                }
+            }
+            else return false;
         }
-        else return false;
+    }
 
+    cleanInput(){
+        this.inputField.innerHTML = '';
+        this.inputField.appendChild(this.caret.value);
     }
     addNewInput(idInput){
         let newNode = this.input.cloneNode(true);
         let btn = this.btnAddNewInput;
         newNode.id = idInput;
         this.input.parentNode.insertBefore(newNode, btn);
-        let numberNewInput = newNode.querySelector('.data-number-input');
-        let numberBtn = btn.querySelector('.data-number-input');
         let btnDeleteInput = newNode.querySelector('.btn-delete-input');
         btnDeleteInput.addEventListener('click', this.handleDeleteInput.bind(this));
-        numberNewInput.innerHTML =  this.numberNextInput;
-        numberBtn.innerHTML =  this.numberNextInput +1;
-        this.numberNextInput ++;
+
+        let activeField = document.querySelector('.activeField');
+        let inputField = newNode.querySelector('.inputField');
+        activeField.classList.remove('activeField');  //снимаем активность с предыдущего поля и убираем каретку
+
+        activeField.querySelector('.inputField').removeChild((this.caret.value));
+
+        newNode.classList.add('activeField'); //добавляем активность новому полю и каретку
+        inputField.innerHTML = '';
+        inputField.appendChild(this.caret.value);
+        this.enumerateFields()
     }
     deleteInput(id){
         let node = document.getElementById(id);
         node.parentNode.removeChild(node);
-        this.numberNextInput -=1;
+        let btnDeleteInput = node.querySelector('.btn-delete-input');
+        btnDeleteInput.removeEventListener('click', this.handleDeleteInput.bind(this));
+        this.enumerateFields()
+    }
+
+    addDataInItem(id,index, data){
+            const activeField = document.getElementById(id);
+            const inputField = activeField.querySelector('.inputField');
+            const caret = inputField.querySelector('strong');
+            const node = this.createWrapperForData(index, data);
+            if(node){
+                inputField.insertBefore(node, caret);
+            }
+        this.recalculateIndicesItems();
 
     }
 
+    deleteDataFromItem(){
+        const activeField = document.querySelector('.activeField');
+        const input = activeField.querySelector('.inputField');
+        const deletedNode = this.caret.value.previousElementSibling;
+        input.removeChild(deletedNode);
+        this.recalculateIndicesItems();
+    }
+    enumerateFields() {
+        let fields = this.form.getElementsByClassName('data-number-input');
+        let counter = 1;
+        for(let i = 0;i<fields.length;i++){
+            fields[i].textContent = '' + counter;
+            counter++
+        }
+    }
 
-    addItem(node){
-        if(node){
-            const activeField = document.querySelector('.activeField');
-            const input = activeField.querySelector('.inputField');
-            const caret = input.querySelector('strong');
-            const digit = /[0-9]/;
 
-            if(caret.previousElementSibling && digit.test(caret.previousElementSibling.textContent)){
-                let text = caret.previousElementSibling.textContent.trim();
-                text+= node.textContent;
-                caret.previousElementSibling.textContent = text;
+    moveCaret(direction){
+        const activeField = document.querySelector('.activeField');
+        const input = activeField.querySelector('.inputField');
+        if(direction === 'left'){
+            const siblingPrev = this.caret.value.previousElementSibling;
+            if(siblingPrev){
+                input.removeChild(this.caret.value);
+                input.insertBefore(this.caret.value, siblingPrev);
             }
-            else{
-                input.insertBefore(node, caret);
+        }
+        else{
+            const siblingNext = this.caret.value.nextElementSibling;
+            if(siblingNext){
+                input.removeChild(siblingNext);
+                input.insertBefore(siblingNext, this.caret.value);
             }
         }
     }
 
-    deleteItem(node){
-        const activeField = document.querySelector('.activeField');
-        const input = activeField.querySelector('.inputField');
+    createWrapperForData(indexItem, data){
+        const letters = /[a-z]/;
+        const minus = /\-/;
+        const signMultiply =  /\*/;
+        const signPower = /\^\d/;
+        const sign = /[\+\-\=]/;
+        const signDivision = /\//;
+        let node = null;
 
-        input.removeChild(node);
-    }
+        if(signPower.test(data)){
+            node = document.createElement('span');
+            let childNode = document.createElement('sup');
+            data = data.replace('^', '');
+            childNode.textContent = data;
+            node.appendChild(childNode);
+        }
+        else if(letters.test(data) ){
+            node = document.createElement('span');
+            let childNode = document.createElement('var');
+            childNode.textContent = data;
+            node.appendChild(childNode);
+        }
+        else if(signMultiply.test(data)){
+            node = document.createElement('span');
+            node.textContent = ' × ';
 
-    moveCarete(){
+        }
+        else if(minus.test(data)){
+            node = document.createElement('span');
+            node.textContent = ' − ';
 
+        }
+        else if(signDivision.test(data)){
+            node = document.createElement('span');
+            node.textContent = ' ÷ ';
+
+        }
+        else if(sign.test(data)){
+            node = document.createElement('span');
+            node.textContent = ' '+ data +' ';
+
+        }
+        else if(signPower.test(data)){
+            node = document.createElement('span');
+        }
+        else{
+            node = document.createElement('span');
+            node.textContent = data;
+        }
+
+        if(node){
+            node.setAttribute('data-index', indexItem);
+        }
+        return node;
     }
 
 }

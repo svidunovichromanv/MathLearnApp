@@ -11,7 +11,6 @@
   <link href="https://fonts.googleapis.com/css?family=Modern+Antiqua" rel="stylesheet">
 </head>
 <body>
-
 <div class="like" ><i class="fas fa-check-circle"></i></div>
 <div class="dislike" style="display: none;" ><i class="fas fa-exclamation-circle"></i></div>
 <div class="container">
@@ -38,7 +37,7 @@
     <div class="button-resize"></div>
     <div class="column-two">
       <div class="container-left" id="input-form">
-        <div class="line-input" id="line-input">
+        <div class="line-input activeField" id="line-input">
                     <span style="background: #f9f9f9;display: inline-block;height: 100%;position: absolute;top:0;left:0;">
                         <span class ='data-number-input' style="font-size: 10px;">1</span>
                     </span>
@@ -46,10 +45,8 @@
           <span class="inputField"></span>
           <span class="btn-delete-input"><i class="fas fa-times"></i></span>
         </div>
-        <div class="line-input btn-addNewField" id="btn-add-item">
-                    <span>
-                        <span class ='data-number-input' style="font-size: 10px;text-align: left;">2</span>
-                    </span>
+        <div class="btn-addNewField" id="btn-add-item"><i class="fas fa-plus"></i>
+
         </div>
 
       </div>
@@ -64,8 +61,8 @@
 
           </div>
           <div class="calc-row">
-            <div class="button-keypad" data-key-value="$^2"><var>a<sup>2</sup></var></div>
-            <div class="button-keypad" data-key-value="$|a|"><var>&#124;a&#124;</var></div>
+            <div class="button-keypad" data-key-value="$^2"><var>a</var><sup>2</sup></div>
+            <div class="button-keypad" data-key-value="|"><var>&#124;a&#124;</var></div>
           </div>
           <div class="calc-row">
             <div class="button-keypad" data-key-value="$left"><span>&#8592;</span></div>

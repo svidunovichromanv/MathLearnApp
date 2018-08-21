@@ -1,6 +1,6 @@
 export class Validator{
     constructor(){
-        this.validCharacters = /[a-z0-9\-\(\)\.\/\^\+\=\|\*]/;
+        this.validCharacters = /^[a-z0-9\-\(\)\.\/\^\+\=\|\*]\d*$/;
         this.validItem = false;
     }
 

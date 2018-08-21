@@ -2,39 +2,55 @@ export class FormulaController {
     constructor(formula, formulaViewInput,keypadView) {
         this.formula = formula;
         this.formulaViewInput = formulaViewInput;
-        this.keypad = keypadView;
         //this.formulaViewValidatorData = formulaViewValidatorData;
-
-        formulaViewInput.on('toggle', this.toggleInput.bind(this));
-        //formulaViewInput.on('edit', this.activeInput.bind(this));
-        formulaViewInput.on('keydown', this.deleteItem.bind(this));
-        formulaViewInput.on('keypress', this.addItem.bind(this));
+        this.memberItem = '';
+        formulaViewInput.on('edit', this.editField.bind(this));
+        formulaViewInput.on('keydownBackspace', this.deleteItemFromInput.bind(this));
+        formulaViewInput.on('keypress', this.addData.bind(this));
         formulaViewInput.on('click', this.addNewInput.bind(this));
         formulaViewInput.on('delete', this.deleteInput.bind(this));
+        formulaViewInput.on('clean', this.cleanInput.bind(this));
+        formulaViewInput.on('keydownArrow', this.moveCaret.bind(this));
         //formulaViewInput.show(formula.state);
-        keypadView.on('click', this.addItem.bind(this));
+        keypadView.on('click', this.addData.bind(this));
+    }
+    moveCaret(direction){
+        this.formulaViewInput.moveCaret(direction);
+    }
+    cleanInput(id){
+        this.formula.cleanItem(id);
+        this.formulaViewInput.cleanInput();
     }
     addNewInput(){
         if(this.formula.data.length === 5)return false;
         let idInput = Date.now();
         let newData ={};
         newData[idInput] = [];
-        this.formula.addNewInput(newData);
+        this.formula.addItem(newData);
         this.formulaViewInput.addNewInput(idInput);
     }
     deleteInput(id){
         if(id === 'line-input'){
             return false;
         }
-        this.formula.deleteInput(id);
+        this.formula.deleteItem(id);
         this.formulaViewInput.deleteInput(id);
     }
 
-    addItem(item) {
-        if(/\$/.test(item)){
-            switch (item){
+    addData(data) {
+        if(data === '^'){
+            this.memberItem +=data;
+            return false;
+        }
+        if(this.memberItem){
+            this.memberItem +=data;
+            data = this.memberItem;
+            this.memberItem ='';
+        }
+        if(/\$/.test(data)){
+            switch (data){
                 case '$backspace':{
-                    this.formulaViewInput.handleDeleteItem({which:8});
+                    this.formulaViewInput.handlePressKeypad({which:8});
                     break;
                 }
                 case '$enter':{
@@ -46,33 +62,34 @@ export class FormulaController {
                     this.formulaViewInput.handleAddItem({key:'2'});
                     break;
                 }
-                case '$|a|':{
-                    break;
-                }
-                case 'left':{
+                case '$left':{
+                    this.moveCaret('left');
                     break;
                 }
                 case '$right':{
+                    this.moveCaret('right');
                     break;
                 }
             }
         }
         else{
-            const node = this.formula.addItem(item);
-            console.log(this.formula.data);
-            if (node) {
-                this.formulaViewInput.addItem(node);
+            let id = document.querySelector('.activeField').id;
+            let index = this.formulaViewInput.getNextIndexItem();
+
+            const result = this.formula.addDataInItem(id,index, data);
+            if (result) {
+                this.formulaViewInput.addDataInItem(id,index, data);
             }
         }
 
     }
 
-    toggleInput(element) {
-        this.formulaViewInput.toggleInput(element);
+    editField(event) {
+        this.formulaViewInput.editField(event);
     }
 
-    deleteItem(node) {
-        this.formula.deleteItem(node);
-        this.formulaViewInput.deleteItem(node);
+    deleteItemFromInput(obj) {  //{id:index}
+        this.formula.deleteDataFromItem(obj);
+        this.formulaViewInput.deleteDataFromItem(obj);
     }
 }

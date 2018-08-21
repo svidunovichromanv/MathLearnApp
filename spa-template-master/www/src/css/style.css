@@ -186,6 +186,7 @@ h2 {
     position: absolute;
     top:0;
     left:40px;
+    width: 80%;
 }
 
 .notification-img{
@@ -200,7 +201,7 @@ h2 {
     line-height: 30px;
 }
 
-.line-input{
+.line-input,.btn-addNewField{
     position: relative;
     width: 100%;
     height:40px;
@@ -258,7 +259,8 @@ h2 {
 }
 
 .activeField{
-    box-shadow:0 0 12px 0 #46bdffd9;
+    box-shadow:0 0 4px 0 #a1e8ff;
+    z-index: 1;
 }
 .fa-graduation-cap{
     color: #ff9800;
@@ -348,4 +350,21 @@ h2 {
     cursor: pointer;
     margin: 20px;
 }
-
+#btn-add-item > i{
+    height: 100%;
+    width: 35px;
+    text-align: center;
+    font-size: 18px;
+    line-height: 44px;
+}
+.blink{
+    position: relative;
+}
+.blink:after{
+    content: '';
+    position: absolute;
+    height: 100%;
+    top:0;
+    left:0;
+    border:solid 1px #2f2f2f;
+}
