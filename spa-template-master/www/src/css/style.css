@@ -320,6 +320,25 @@ h2 {
     color: #4dd959;
     transition: .5s font-size;
 }
+
+.dislike{
+    position: fixed;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    top:0;
+    left:0;
+    bottom: 0;
+    right: 0;
+    display: none;
+
+}
+.dislike i{
+    font-size: 80px;
+    color: red;
+    transition: .5s font-size;
+}
+
 #btn-next{
     border: none;
     background: orange;
