@@ -3,7 +3,7 @@ export class FormulaController {
         this.formula = formula;
         this.formulaViewInput = formulaViewInput;
         //this.formulaViewValidatorData = formulaViewValidatorData;
-
+        this.memberItem = '';
         formulaViewInput.on('edit', this.editField.bind(this));
         formulaViewInput.on('keydownBackspace', this.deleteItemFromInput.bind(this));
         formulaViewInput.on('keypress', this.addData.bind(this));
@@ -38,6 +38,15 @@ export class FormulaController {
     }
 
     addData(data) {
+        if(data === '^'){
+            this.memberItem +=data;
+            return false;
+        }
+        if(this.memberItem){
+            this.memberItem +=data;
+            data = this.memberItem;
+            this.memberItem ='';
+        }
         if(/\$/.test(data)){
             switch (data){
                 case '$backspace':{
@@ -66,7 +75,7 @@ export class FormulaController {
         else{
             let id = document.querySelector('.activeField').id;
             let index = this.formulaViewInput.getNextIndexItem();
-            console.log(index);
+
             const result = this.formula.addDataInItem(id,index, data);
             if (result) {
                 this.formulaViewInput.addDataInItem(id,index, data);

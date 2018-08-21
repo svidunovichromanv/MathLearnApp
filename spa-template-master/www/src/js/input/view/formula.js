@@ -16,7 +16,6 @@ export class FormulaViewInput extends EventEmitter{
         document.addEventListener('keydown', this.handlePressKeypad.bind(this));
         this.btnCleanInput.addEventListener('click', this.handleCleanInput.bind(this));
         this.inputField.appendChild(this.caret.value);
-        this.isPower = false;
     }
     handleEditingField(event){
         this.emit('edit', event);
@@ -46,19 +45,17 @@ export class FormulaViewInput extends EventEmitter{
 
     editField(event) {
         let activeField = document.querySelector('.activeField');
-        if (event.target.classList.contains('line-input')) {
+        let newActiveField = event.target.parentNode;
 
-            let inputField = event.target.querySelector('.inputField');
+        if (newActiveField.classList.contains('line-input')) {
 
+            let inputField = newActiveField.querySelector('.inputField');
 
             if (activeField) {
                 activeField.classList.remove('activeField');  //снимаем активность с предыдущего поля и убираем каретку
-
                 activeField.querySelector('.inputField').removeChild((this.caret.value));
             }
-
-
-            event.target.classList.add('activeField'); //добавляем активность новому полю и каретку
+            newActiveField.classList.add('activeField'); //добавляем активность новому полю и каретку
             inputField.appendChild(this.caret.value);
         }
         else if(activeField && !find(event.path, ['input-form','calculator','btn-calculator'])){
@@ -188,25 +185,34 @@ export class FormulaViewInput extends EventEmitter{
 
     createWrapperForData(indexItem, data){
         const letters = /[a-z]/;
-        const digit = /[0-9]/;
+        const minus = /\-/;
         const signMultiply =  /\*/;
-        const signPower = /\^/;
+        const signPower = /\^\d/;
         const sign = /[\+\-\=]/;
         const signDivision = /\//;
         let node = null;
 
-        if(this.isPower && digit.test(data)){
-            this.isPower = false;
-            node = document.createElement('sup');
-            node.textContent = data;
+        if(signPower.test(data)){
+            node = document.createElement('span');
+            let childNode = document.createElement('sup');
+            data = data.replace('^', '');
+            childNode.textContent = data;
+            node.appendChild(childNode);
         }
         else if(letters.test(data) ){
-            node = document.createElement('var');
-            node.textContent = data;
+            node = document.createElement('span');
+            let childNode = document.createElement('var');
+            childNode.textContent = data;
+            node.appendChild(childNode);
         }
         else if(signMultiply.test(data)){
             node = document.createElement('span');
             node.textContent = ' × ';
+
+        }
+        else if(minus.test(data)){
+            node = document.createElement('span');
+            node.textContent = ' − ';
 
         }
         else if(signDivision.test(data)){
@@ -220,7 +226,6 @@ export class FormulaViewInput extends EventEmitter{
 
         }
         else if(signPower.test(data)){
-            this.isPower = true;
             node = document.createElement('span');
         }
         else{
@@ -233,4 +238,5 @@ export class FormulaViewInput extends EventEmitter{
         }
         return node;
     }
+
 }

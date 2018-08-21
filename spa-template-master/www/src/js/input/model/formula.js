@@ -17,6 +17,8 @@ import { Validator } from './validator.js';
      getItem(id) {
          for (let i = 0; i < this.data.length; i++) {
              for (let k in this.data[i]) {
+                 console.log(k);
+
                  if (k === id) {
                      return this.data[i][k];
                  }
@@ -37,9 +39,9 @@ import { Validator } from './validator.js';
         if(this.stateData){
             if(index === item.length){
                 item.push(data);
+                this.emit('change', this.data);
             }
             else{
-                console.log(item);
                 let newArray = [];
                 for(let i=0;i<index;i++){
                     newArray.push(item[i]);
@@ -50,7 +52,6 @@ import { Validator } from './validator.js';
                 }
                 this.changeData(id, newArray);
             }
-
             return true;
         }
         else return false;
@@ -63,7 +64,8 @@ import { Validator } from './validator.js';
                      let newData = {};
                      newData[id] = newArray;
                      this.data.push(newData);
-                     console.log(this.data);
+
+                     this.emit('change', this.data);
                  }
              }
          }
@@ -78,7 +80,7 @@ import { Validator } from './validator.js';
         if(item.length > 0){
             //let nodeIndex = parseInt(node.getAttribute('data-index'));
             item.splice(index,1);
-
+            this.emit('change', this.data);
         }
 
     }
@@ -93,6 +95,7 @@ import { Validator } from './validator.js';
             for(let k in this.data[i]){
                 if(k === id){
                     this.data.splice(i, 1);
+                    this.emit('change', this.data);
                     break;
                 }
             }
@@ -102,8 +105,9 @@ import { Validator } from './validator.js';
          const item = this.getItem(id);
          item.splice(0, item.length);
 
-     }
+         this.emit('change', this.data);
 
+     }
 }
 
 
