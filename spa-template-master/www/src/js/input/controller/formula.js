@@ -4,6 +4,7 @@ export class FormulaController {
         this.formulaViewInput = formulaViewInput;
         //this.formulaViewValidatorData = formulaViewValidatorData;
         this.memberItem = '';
+        this.keypad = keypadView;
         formulaViewInput.on('edit', this.editField.bind(this));
         formulaViewInput.on('keydownBackspace', this.deleteItemFromInput.bind(this));
         formulaViewInput.on('keypress', this.addData.bind(this));
@@ -13,6 +14,10 @@ export class FormulaController {
         formulaViewInput.on('keydownArrow', this.moveCaret.bind(this));
         //formulaViewInput.show(formula.state);
         keypadView.on('click', this.addData.bind(this));
+        keypadView.on('showKeypad', this.showKeypad.bind(this));
+    }
+    showKeypad(){
+        this.keypad.showKeypad();
     }
     moveCaret(direction){
         this.formulaViewInput.moveCaret(direction);
@@ -38,47 +43,52 @@ export class FormulaController {
     }
 
     addData(data) {
-        if(data === '^'){
-            this.memberItem +=data;
-            return false;
-        }
-        if(this.memberItem){
-            this.memberItem +=data;
-            data = this.memberItem;
-            this.memberItem ='';
-        }
-        if(/\$/.test(data)){
-            switch (data){
-                case '$backspace':{
-                    this.formulaViewInput.handlePressKeypad({which:8});
-                    break;
-                }
-                case '$enter':{
-                    this.addNewInput();
-                    break;
-                }
-                case '$^2':{
-                    this.formulaViewInput.handleAddItem({key:'^'});
-                    this.formulaViewInput.handleAddItem({key:'2'});
-                    break;
-                }
-                case '$left':{
-                    this.moveCaret('left');
-                    break;
-                }
-                case '$right':{
-                    this.moveCaret('right');
-                    break;
+        let activeField = document.querySelector('.activeField');
+        if (activeField) {
+
+            if (data === '^') {
+                this.memberItem += data;
+                return false;
+            }
+            if (this.memberItem) {
+                this.memberItem += data;
+                data = this.memberItem;
+                this.memberItem = '';
+            }
+            if (/\$/.test(data)) {
+                switch (data) {
+                    case '$backspace': {
+                        this.formulaViewInput.handlePressKeypad({which: 8});
+                        break;
+                    }
+                    case '$enter': {
+                        this.addNewInput();
+                        break;
+                    }
+                    case '$^2': {
+                        this.formulaViewInput.handleAddItem({key: '^'});
+                        this.formulaViewInput.handleAddItem({key: '2'});
+                        break;
+                    }
+                    case '$left': {
+                        this.moveCaret('left');
+                        break;
+                    }
+                    case '$right': {
+                        this.moveCaret('right');
+                        break;
+                    }
                 }
             }
-        }
-        else{
-            let id = document.querySelector('.activeField').id;
-            let index = this.formulaViewInput.getNextIndexItem();
+            else {
+                let id = activeField.id;
+                let index = this.formulaViewInput.getNextIndexItem();
+                
+                const result = this.formula.addDataInItem(id, index, data);
 
-            const result = this.formula.addDataInItem(id,index, data);
-            if (result) {
-                this.formulaViewInput.addDataInItem(id,index, data);
+                if (result) {
+                    this.formulaViewInput.addDataInItem(id, index, data);
+                }
             }
         }
 

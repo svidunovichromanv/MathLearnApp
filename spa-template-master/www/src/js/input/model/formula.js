@@ -13,6 +13,9 @@ import { Validator } from './validator.js';
             this.validator = validator;
         }
     }
+    getData(){
+        return this.data;
+    }
 
      getItem(id) {
          for (let i = 0; i < this.data.length; i++) {

@@ -6,9 +6,12 @@ import { FormulaController } from './controller/formula.js';
 import { view } from './helpers.js';
 
 
-const formula = new Formula(new Validator());
+
+export const formula = new Formula(new Validator());
 const input = new FormulaViewInput();
 const keypadView = new KeypadView();
 const controller = new FormulaController(formula, input, keypadView);
 
 formula.on('change', data => view(data));
+
+

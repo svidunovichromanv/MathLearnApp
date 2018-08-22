@@ -1,3 +1,11 @@
+
+import { formula } from "../input/index.js";
+
+
+/*const wrapper = document.querySelector('.columns');
+    var one = document.querySelector('.column-one');
+    const resizeBtn = document.querySelector('.button-resize');*/
+
     document.addEventListener('DOMContentLoaded', theory);
     const area = document.querySelector('.area');
     let page = 0;
@@ -15,7 +23,7 @@
         };
     }
 
-     function checkAnswer() {
+     /*function checkAnswer() {
          const xhr = new XMLHttpRequest;
          xhr.open('GET', ''+page+'.json', true);
          xhr.send();
@@ -37,8 +45,38 @@
              }
          };
 
-     }
+     }*/
 
+export function checkAnswer(){
+    const xhr = new XMLHttpRequest;
+    const data = formula.getData();
+    let check = getAnswerFromData(data);
+    xhr.open('GET', ''+page+'.json', true);
+    xhr.send();
+    xhr.onreadystatechange = function() {
+        if(this.readyState === 4 && this.status === 200) {
+            let text = JSON.parse(this.responseText);
+            let answer = text.answer;
+            console.log(answer);
+            console.log(check);
+            if(answer == check){
+                showLike();
+                parseText(text);
+            }
+            else{
+                showDislike();
+            }
+        }
+    };
+
+    function getAnswerFromData(data){
+        let firstItem = data[0];
+        let key = Object.keys(firstItem);
+        let formula = firstItem[key].join('');
+        return formula
+    }
+
+}
      function parseText(text) {
          let output = '';
          let arr = text["theory"].split('\n');
@@ -62,24 +100,45 @@
      }
 
 
-    const keypad = document.getElementById('calculator'); //кнопка скрыть показать экранную клавиатуру
+    /*let buttonResize = null;
+    let columnLeft = null;
+    let columnRight = null;
+    let cursorCoordX = 0;
+    let flexBoxValueColumnLeft = 0;
+    let flexBoxValueColumnRight = 0;
+    const columns = document.querySelector('.columns');
 
-    function calculatorHidden(e) {
-        const buttonKeypad = e.currentTarget;
-        keypad.classList.toggle('calculator-visible');
-        buttonKeypad.classList.toggle('close');
-        setTimeout(function () {
-            let icon = buttonKeypad.querySelector('.fas');
-            icon.classList.toggle('fa-sort-down');
-            icon.classList.toggle('fa-sort-up');
-            buttonKeypad.classList.toggle('open');
-        },0)
-    }
+    columns.ondragstart = function (){return false;};
 
-//resizer
-    const v1 = document.querySelector('.column-one');
-    const v2 = document.querySelector('.column-two');
-    const r1_lr_handle = document.querySelector('.button-resize');
+    columns.onmousedown = function startResizeColumns(e) {
+
+        if(e.target.classList.contains('button-resize')){
+            buttonResize = e.target;
+            columnLeft = buttonResize.previousElementSibling;
+            columnRight = buttonResize.nextElementSibling;
+            flexBoxValueColumnLeft = parseFloat(window.getComputedStyle(columnLeft).webkitFlexGrow);
+            flexBoxValueColumnRight = parseFloat(window.getComputedStyle(columnRight).webkitFlexGrow);
+            cursorCoordX = e.clientX;
+            document.body.style.cursor = 'col-resize';
+        }
+        else{
+            return false;
+        }
+
+    };
+//кнопка изменения размеров блоков
+    columns.onmousemove = function resizeColumns(e) {
+
+        if (buttonResize) {
+            if(flexBoxValueColumnLeft + (e.clientX - cursorCoordX)/850 < 0.06588275882352941 || flexBoxValueColumnLeft + (e.clientX - cursorCoordX)/850 > 1.257){
+                stopResize();
+                return false;
+            }
+            columnLeft.setAttribute('style', '-webkit-box-flex: ' + ( flexBoxValueColumnLeft + (e.clientX - cursorCoordX) / 850) + '; flex: ' + (flexBoxValueColumnLeft + (e.clientX - cursorCoordX) / 850) + ' 1 0%');
+            columnRight.setAttribute('style', '-webkit-box-flex: ' + ( flexBoxValueColumnRight - (e.clientX - cursorCoordX) / 850) + '; flex: ' + (flexBoxValueColumnRight - (e.clientX - cursorCoordX) / 850) + ' 1 0%');
+        }
+        else return false;
+
 
     var mouseStartPosition = {};
     var v1StartWidth;
@@ -137,29 +196,62 @@ function mouseup(e) {
         btn.setAttribute('style', 'transform:translateX('+ (widthMenu - btn.offsetWidth) +'px);');
         btn.classList.toggle('fa-bars');
         btn.classList.toggle('fa-times');
- }
+ }*/
 //показать галочку за правильное решшение;
  function showLike() {
    const like = document.querySelector('.like');
+   const message = generateMessage('like');
+     like.querySelector('p').innerHTML = message;
     like.style.display = 'flex';
      setTimeout(function () {
-         like.querySelector('i').style.fontSize = '800px';
+         like.querySelector('i').style.fontSize = '150px';
+         like.style.fontSize = '100px';
      },10);
      setTimeout(function () {
-         like.querySelector('i').style.fontSize = '80px';
+         like.querySelector('i').style.fontSize = '20px';
          like.style.display = 'none';
      },1500);
  }
 
 function showDislike() {
     const dislike = document.querySelector('.dislike');
+    const message = generateMessage();
+    dislike.querySelector('p').innerHTML = message;
     dislike.style.display = 'flex';
+    console.log(message);
     setTimeout(function () {
-         dislike.querySelector('i').style.fontSize = '800px';
+         dislike.querySelector('i').style.fontSize = '150px';
+        dislike.style.fontSize = '100px';
      },10);
      setTimeout(function () {
-         dislike.querySelector('i').style.fontSize = '80px';
+         dislike.querySelector('i').style.fontSize = '20px';
          dislike.style.display = 'none';
      },1500);
 
 }
+
+function generateMessage(type) {
+    let messages,
+        quantityOfMessages,
+        number;
+     if(type == 'like'){
+         messages = ['Молодец!','Правильно!','Так держать!','Отлично!','Верно!','Твои успехи радуют!'];
+         quantityOfMessages = messages.length-1;
+
+     }
+     else{
+         messages = ['В другой раз получиться!','Ты можешь лучше!','Попробуй еще раз!','Надо сосредотачиться!','Мы в тебя верим!','Тяжело в ученье , легко в бою!'];
+         quantityOfMessages = messages.length-1;
+
+     }
+    number = getRandomInt(0,quantityOfMessages);
+     return messages[number];
+
+}
+
+
+function getRandomInt(min, max)
+{
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+

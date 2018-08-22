@@ -111,6 +111,7 @@ export class FormulaViewInput extends EventEmitter{
     addNewInput(idInput){
         let newNode = this.input.cloneNode(true);
         let btn = this.btnAddNewInput;
+
         newNode.id = idInput;
         this.input.parentNode.insertBefore(newNode, btn);
         let btnDeleteInput = newNode.querySelector('.btn-delete-input');
@@ -118,10 +119,10 @@ export class FormulaViewInput extends EventEmitter{
 
         let activeField = document.querySelector('.activeField');
         let inputField = newNode.querySelector('.inputField');
-        activeField.classList.remove('activeField');  //снимаем активность с предыдущего поля и убираем каретку
-
-        activeField.querySelector('.inputField').removeChild((this.caret.value));
-
+        if(activeField){
+            activeField.classList.remove('activeField');   //снимаем активность с предыдущего поля и убираем каретку
+            activeField.querySelector('.inputField').removeChild((this.caret.value));
+        }
         newNode.classList.add('activeField'); //добавляем активность новому полю и каретку
         inputField.innerHTML = '';
         inputField.appendChild(this.caret.value);
