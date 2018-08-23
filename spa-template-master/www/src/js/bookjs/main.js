@@ -19,6 +19,7 @@ import { formula } from "../input/index.js";
             if(this.readyState === 4 && this.status === 200) {
                 let text = JSON.parse(this.responseText);
                 parseText(text);
+                formula.setData(text["equation"]);
             }
         };
     }
@@ -47,12 +48,13 @@ import { formula } from "../input/index.js";
 
      }*/
 
-export function checkAnswer(){
+export function checkAnswer(e){
     const xhr = new XMLHttpRequest;
     const data = formula.getData();
     let check = getAnswerFromData(data);
     xhr.open('GET', ''+page+'.json', true);
     xhr.send();
+    let btn = e.target;
     xhr.onreadystatechange = function() {
         if(this.readyState === 4 && this.status === 200) {
             let text = JSON.parse(this.responseText);
@@ -62,9 +64,15 @@ export function checkAnswer(){
             if(answer == check){
                 showLike();
                 parseText(text);
+                formula.setData(text["equation"]);
             }
             else{
                 showDislike();
+            }
+            if(btn.id == 'btn-next'){
+                showDislike();
+                parseText(text);
+                formula.setData(text["equation"]);
             }
         }
     };
@@ -80,19 +88,28 @@ export function checkAnswer(){
      function parseText(text) {
          let output = '';
          let arr = text["theory"].split('\n');
-         let equations = text["equation"];
          output += '<h2>'+text["title"]+'</h2>';
 
          arr.forEach(function(i){
              output += '<p>'+i+'</p>';
          });
+         let titleTask = '<h2>Выполните задание:</h2>';
+         output += titleTask;
+         let task = text['task'];
+         output += '<p class ="task">' + task + '</p>';
          area.innerHTML = output;
-         let button = document.createElement('input');
-         button.value = "ДАЛЕЕ";
-         button.id = 'btn-next';
-         button.type = 'button';
-         area.appendChild(button);
-         button.addEventListener('click', checkAnswer);
+         let btnCheck = document.createElement('input');
+         btnCheck.value = "ПРОВЕРИТЬ";
+         btnCheck.id = 'btn-check';
+         btnCheck.type = 'button';
+         area.appendChild(btnCheck);
+         btnCheck.addEventListener('click', checkAnswer);
+         let btnNext = document.createElement('input');
+         btnNext.value = "СДАЮСЬ";
+         btnNext.id = 'btn-next';
+         btnNext.type = 'button';
+         area.appendChild(btnNext);
+         btnNext.addEventListener('click', checkAnswer);
          page ++;
          if (page === 8) {
              page = 0;
@@ -219,7 +236,7 @@ function generateMessage(type) {
 
      }
      else{
-         messages = ['В другой раз получиться!','Ты можешь лучше!','Попробуй еще раз!','Надо сосредотачиться!','Мы в тебя верим!','Тяжело в ученье , легко в бою!'];
+         messages = ['В другой раз получиться!','Ты можешь лучше!','Попробуй еще раз!','Надо сосредоточиться!','Мы в тебя верим!','Тяжело в ученье , легко в бою!'];
          quantityOfMessages = messages.length-1;
 
      }

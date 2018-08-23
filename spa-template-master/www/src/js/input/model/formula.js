@@ -20,13 +20,35 @@ import { Validator } from './validator.js';
      getItem(id) {
          for (let i = 0; i < this.data.length; i++) {
              for (let k in this.data[i]) {
-                 console.log(k);
-
                  if (k === id) {
                      return this.data[i][k];
                  }
              }
          }
+     }
+     setData(data){
+        //пример для теста data = [["y","=","3","*","x","^2"],["y","=","0",".","5","*","x","^2"]];
+            this.emit('setData', data);
+     }
+
+     saveData(id, data){
+         let item = this.getItem(id);
+         if(item) {
+             for (let i = 0; i < this.data.length; i++) {
+                 for (let k in this.data[i]) {
+                     if (k === id) {
+                         this.data[i][k] = data;
+                     }
+                 }
+             }
+         }
+         else{
+             let newItem = {[id]: data};
+             this.data.push(newItem);
+         }
+     }
+     clearData(){
+         this.data = [{'line-input':[]}];
      }
 
 
@@ -67,7 +89,7 @@ import { Validator } from './validator.js';
                      let newData = {};
                      newData[id] = newArray;
                      this.data.push(newData);
-
+                     console.log(this.data);
                      this.emit('change', this.data);
                  }
              }
