@@ -26,12 +26,10 @@ import { Validator } from './validator.js';
              }
          }
      }
-     setData(data){
-        //пример для теста data = [["y","=","3","*","x","^2"],["y","=","0",".","5","*","x","^2"]];
-            this.emit('setData', data);
-            this.emit('change', this.data);
-
-     }
+     setData(data) {
+         //пример для теста data = [["y","=","3","*","x","^2"],["y","=","0",".","5","*","x","^2"]];
+         this.emit('setData', data);
+         this.emit('change', this.data);
 
      saveData(id, data){
          let item = this.getItem(id);
