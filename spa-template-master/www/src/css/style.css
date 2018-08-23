@@ -317,6 +317,7 @@ h2 {
     right: 0;
     display: none;
     color: #0819b9;
+    background: rgba(255, 255, 255, 0.72);
 
 }
 .like i{
@@ -335,12 +336,13 @@ h2 {
     right: 0;
     display: none;
     color: #ff827e;
+    background: rgba(255, 255, 255, 0.72);
 }
 .dislike i{
     color: #ff9d21;
     transition: .5s font-size;
 }
-#btn-next{
+#btn-next,#btn-check{
     border: none;
     background: orange;
     color:white;
@@ -366,4 +368,8 @@ h2 {
     top:0;
     left:0;
     border:solid 1px #2f2f2f;
+}
+.task{
+    color: #ff9800;
+    font-size: 20px;
 }

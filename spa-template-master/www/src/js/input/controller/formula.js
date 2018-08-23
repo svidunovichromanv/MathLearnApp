@@ -15,7 +15,19 @@ export class FormulaController {
         //formulaViewInput.show(formula.state);
         keypadView.on('click', this.addData.bind(this));
         keypadView.on('showKeypad', this.showKeypad.bind(this));
+        formula.on('setData', this.setData.bind(this));
     }
+    setData(data) {
+        let id = 'line-input';
+        this.formulaViewInput.clearData();
+        this.formula.clearData();
+        for (let i = 0; i < data.length; i++) {
+            this.formulaViewInput.showData(id, data[i]);
+            this.formula.saveData(id, data[i]);
+            id = Date.now();
+        }
+    }
+
     showKeypad(){
         this.keypad.showKeypad();
     }
