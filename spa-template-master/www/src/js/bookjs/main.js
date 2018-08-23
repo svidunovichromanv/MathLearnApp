@@ -5,8 +5,8 @@ import { formula } from "../input/index.js";
 /*const wrapper = document.querySelector('.columns');
     var one = document.querySelector('.column-one');
     const resizeBtn = document.querySelector('.button-resize');*/
-    document.addEventListener('DOMContentLoaded', theory);
 
+    document.addEventListener('DOMContentLoaded', theory);
     const area = document.querySelector('.area');
     let page = 0;
     const path = document.location.href;
@@ -156,17 +156,38 @@ export function checkAnswer(e){
         }
         else return false;
 
-    };
 
-    columns.onmouseup = stopResize();
+    var mouseStartPosition = {};
+    var v1StartWidth;
+    var v2StartWidth;
 
-        function stopResize() {
-            columnLeft = null;
-            columnRight = null;
-            buttonResize = null;
-            cursorCoordX = 0;
-            document.body.style.cursor = 'auto';
-    }
+    r1_lr_handle.addEventListener("mousedown", mousedownR1RL);
+
+function mousedownR1RL(e) {
+  // get v1 width
+  v1StartWidth = v1.offsetWidth;
+  v2StartWidth = v2.offsetWidth;
+  // get mouse position
+  mouseStartPosition.x = e.pageX;
+  mouseStartPosition.y = e.pageY;
+
+
+  // add listeners for mousemove, mouseup
+  window.addEventListener("mousemove", mousemove);
+  window.addEventListener("mouseup", mouseup);
+}
+
+function mousemove(e) {
+  // console.log('mouse move... x:', e.pageX, 'y:', e.pageY);
+  var diff = mouseStartPosition.x - e.pageX;
+    v1.style.flexBasis = v1StartWidth + -1*diff + 'px';
+    v2.style.flexBasis = v2StartWidth + diff + 'px';
+}
+
+function mouseup(e) {
+  window.removeEventListener("mousemove", mousemove);
+  window.removeEventListener("mouseup", mouseup);
+}
 
 
 
