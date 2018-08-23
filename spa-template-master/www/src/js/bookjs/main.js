@@ -10,10 +10,34 @@ import { formula } from "../input/index.js";
     const area = document.querySelector('.area');
     let page = 0;
     const path = document.location.href;
+    let hash = window.location.hash.charAt(1);
+    const sideMenu =document.getElementById('side-menu');
+    sideMenu.addEventListener('click', myFunction);
+
+
+    window.addEventListener("hashchange", myFunction);
+
+    function myFunction(e) {
+    let link = e.target;
+    console.log(link);
+    var hash = window.location.hash.charAt(1);
+    const xhr = new XMLHttpRequest;
+        xhr.open('GET', ''+hash+'.json', true);
+        xhr.send();
+        xhr.onreadystatechange = function() {
+            if(this.readyState === 4 && this.status === 200) {
+                let text = JSON.parse(this.responseText);
+                parseText(text);
+                formula.setData(text["equation"]);
+
+            }
+        };
+}
 
     function theory() {
+        window.location.hash = 1;
         const xhr = new XMLHttpRequest;
-        xhr.open('GET', ''+page+'.json', true);
+        xhr.open('GET', ''+hash+'.json', true);
         xhr.send();
         xhr.onreadystatechange = function() {
             if(this.readyState === 4 && this.status === 200) {
@@ -52,7 +76,7 @@ export function checkAnswer(e){
     const xhr = new XMLHttpRequest;
     const data = formula.getData();
     let check = getAnswerFromData(data);
-    xhr.open('GET', ''+page+'.json', true);
+    xhr.open('GET', ''+hash+'.json', true);
     xhr.send();
     let btn = e.target;
     xhr.onreadystatechange = function() {
@@ -63,6 +87,8 @@ export function checkAnswer(e){
             console.log(check);
             if(answer == check){
                 showLike();
+                hash++;
+                window.location.hash = hash;
                 parseText(text);
                 formula.setData(text["equation"]);
             }
@@ -71,6 +97,8 @@ export function checkAnswer(e){
             }
             if(btn.id == 'btn-next'){
                 showDislike();
+                hash++;
+                window.location.hash = hash;
                 parseText(text);
                 formula.setData(text["equation"]);
             }
@@ -110,7 +138,7 @@ export function checkAnswer(e){
          btnNext.type = 'button';
          area.appendChild(btnNext);
          btnNext.addEventListener('click', checkAnswer);
-         page ++;
+         // page ++;
          if (page === 8) {
              page = 0;
          }

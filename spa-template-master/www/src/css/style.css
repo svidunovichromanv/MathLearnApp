@@ -373,3 +373,25 @@ h2 {
     color: #ff9800;
     font-size: 20px;
 }
+
+@media(max-width: 1245px) {
+    .columns {
+        flex-direction: column;
+        margin: 0 auto;
+    }
+/*    .column-two {
+        flex-direction: column;
+    }*/
+
+    .column-one {
+        border-bottom: 1px solid #c6c6c6;
+    }
+    .container-left {
+        align-self: stretch;
+    }
+    
+    .container-left, .container-right {
+        width: 100%;
+    }
+}
+
