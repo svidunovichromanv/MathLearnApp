@@ -281,7 +281,7 @@ function generateMessage(type) {
     let messages,
         quantityOfMessages,
         number;
-     if(type == 'like'){
+     if(type === 'like'){
          messages = ['Молодец!','Правильно!','Так держать!','Отлично!','Верно!','Твои успехи радуют!'];
          quantityOfMessages = messages.length-1;
 

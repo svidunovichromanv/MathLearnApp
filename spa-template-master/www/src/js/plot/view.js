@@ -5,21 +5,43 @@ export class ViewPlot{
         this.onCheckedCallback = null;
         this.layout=null;
     }
-    plot(){
-        this.layout = {
+    plot(self){
+        if(!self){
+            self =this;
+        }
+        self.layout = {
             autosize: true,
-            width: document.getElementById('plot').getBoundingClientRect().width,
-            height: document.getElementById('plot').getBoundingClientRect().height,
+            width: self.host.getBoundingClientRect().width,
+            height: self.host.getBoundingClientRect().height,
             margin: {
                 l: 30,
                 r: 20,
-                b: 30,
+                b: 60,
                 t: 20,
                 pad: 4
-            }
+            },
+            xaxis: {
+                title: 'Ось Ох',
+                titlefont: {
+                    family: 'Courier New, monospace',
+                    size: 18,
+                    color: '#7f7f7f'
+                }
+            },
+            yaxis: {
+                title: 'Ось Оу',
+                titlefont: {
+                    family: 'Courier New, monospace',
+                    size: 18,
+                    color: '#7f7f7f',
+                    transform: "rotate(55deg)"
+                }
+            },
+            showlegend:false
         };
-        Plotly.newPlot(this.host, this.model.data, this.layout);
-        this.host.on('plotly_relayout', e => this.onChecked(e['xaxis.range[0]'], e['xaxis.range[1]']));
+
+        Plotly.newPlot(self.host, self.model.data, self.layout);
+        self.host.on('plotly_relayout', e => self.onChecked(e['xaxis.range[0]'], e['xaxis.range[1]']));
     }
     onChecked(firstX,lastX) {
         if (typeof (this.onCheckedCallback) === 'function') {

@@ -1,4 +1,5 @@
 import {formula} from "../input/index.js";
+import {addEvent} from "./resizeWindow.js";
 
 export class ControllerPlot{
     constructor(model, view){
@@ -11,7 +12,7 @@ export class ControllerPlot{
             model.recalculate(firstX,lastX);
         };
         formula.on('change', data => model.recalculate(-10,10,data));
-        window.addEventListener('resize', view);
+        addEvent(window, "resize", ()=>{view.plot(view)});
     }
 
     renderView() {
