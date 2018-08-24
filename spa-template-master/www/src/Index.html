@@ -180,7 +180,7 @@ import {viewPlot} from './js/plot/indexPlot.js';
     let mouseStartPosition = {};
     let v1StartWidth;
     let v2StartWidth;
-
+    let resBtn;
     r1_lr_handle.addEventListener("mousedown", mousedownR1RL);
 
 function mousedownR1RL(e) {
@@ -190,7 +190,8 @@ function mousedownR1RL(e) {
   // get mouse position
   mouseStartPosition.x = e.pageX;
   mouseStartPosition.y = e.pageY;
-
+  //save the butt
+    resBtn = e.target;
 
   // add listeners for mousemove, mouseup
   document.addEventListener("mousemove", mousemove);
@@ -199,29 +200,20 @@ function mousedownR1RL(e) {
 
 
 function mousemove(e) {
-  // console.log('mouse move... x:', e.pageX, 'y:', e.pageY);
-  var diff = mouseStartPosition.x - e.pageX;
-    v1.style.flexBasis = v1StartWidth + -1*diff + 'px';
-    v2.style.flexBasis = v2StartWidth + diff + 'px';
-    viewPlot.plot(viewPlot);
-}
-
-    function mousemove(e) {
+    if(resBtn) {
         // console.log('mouse move... x:', e.pageX, 'y:', e.pageY);
         let diff = mouseStartPosition.x - e.pageX;
-        if((v2StartWidth + diff) < 550){
-            return false;
-        }
-        v1.style.flexBasis = v1StartWidth + -1*diff + 'px';
+        v1.style.flexBasis = v1StartWidth + -1 * diff + 'px';
         v2.style.flexBasis = v2StartWidth + diff + 'px';
         viewPlot.plot(viewPlot);
     }
-
+}
 
 
 function mouseup(e) {
   document.removeEventListener("mousemove", mousemove);
   document.removeEventListener("mouseup", mouseup);
+  resBtn = null;
 }
 
 
