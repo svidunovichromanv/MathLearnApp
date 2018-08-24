@@ -11,6 +11,7 @@ export class ModelPlot{
         this.trace1 = null;
         this.data = null;
         this.changeCallback = null;
+        this.temp=2;
     }
     recalculate(firstX,lastX,expression){
         if (!expression){
@@ -22,13 +23,14 @@ export class ModelPlot{
         for (let i = 0; i<this.expression.length; i++) {
             for (let key in this.expression[i]) {
                 try {
-                    let temp = 2;
                     for (let j = 0; j <= this.expression[i][key].length; j++){
                         if (this.expression[i][key][j] === "|"){
-                            if(temp%2===0){
-                                this.expression[i][key][j]="abc(";
+                            if(this.temp%2===0){
+                                this.expression[i][key][j]="sqrt((";
+                                this.temp++;
                             }else{
-                                this.expression[i][key][j]=")";
+                                this.expression[i][key][j]=")^2)";
+                                this.temp++;
                             }
                         }
                     }

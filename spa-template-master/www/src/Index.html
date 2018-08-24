@@ -15,7 +15,7 @@
 <div class="demo-2 spinner "></div>
 <div class="container">
   <div class="header">
-    <i class="fas fa-bars button-burger-menu" onclick="showSideMenu(event)"></i>
+    <i class="fas fa-bars button-burger-menu"></i>
     <h1> <i class="fas fa-graduation-cap"></i> math learn</h1>
   </div>
   <div class="dimmer"></div>
@@ -46,10 +46,8 @@
           <span class="inputField"></span>
           <span class="btn-delete-input"><i class="fas fa-times"></i></span>
         </div>
-        <div class="btn-addNewField" id="btn-add-item"><i class="fas fa-plus"></i>
-
-        </div>
-
+        <div class="btn-addNewField" id="btn-add-item"><i class="fas fa-plus"></i></div>
+        <input id ="focus" type="hidden">
       </div>
       <div id="plot" class="container-right"></div>
       <div id="calculator">
@@ -113,7 +111,7 @@
 </div>
 
 
-<script>
+<script type="module">
     /*document.addEventListener('DOMContentLoaded', theory);
     const area = document.querySelector('.area');
     let page = 0;
@@ -173,15 +171,15 @@
         }
     }*/
 
-
+import {viewPlot} from './js/plot/indexPlot.js';
 //resizer
     const v1 = document.querySelector('.column-one');
     const v2 = document.querySelector('.column-two');
     const r1_lr_handle = document.querySelector('.button-resize');
 
-    var mouseStartPosition = {};
-    var v1StartWidth;
-    var v2StartWidth;
+    let mouseStartPosition = {};
+    let v1StartWidth;
+    let v2StartWidth;
 
     r1_lr_handle.addEventListener("mousedown", mousedownR1RL);
 
@@ -195,20 +193,35 @@ function mousedownR1RL(e) {
 
 
   // add listeners for mousemove, mouseup
-  window.addEventListener("mousemove", mousemove);
-  window.addEventListener("mouseup", mouseup);
+  document.addEventListener("mousemove", mousemove);
+  document.addEventListener("mouseup", mouseup);
 }
 
-function mousemove(e) {
-  // console.log('mouse move... x:', e.pageX, 'y:', e.pageY);
-  var diff = mouseStartPosition.x - e.pageX;
-    v1.style.flexBasis = v1StartWidth + -1*diff + 'px';
-    v2.style.flexBasis = v2StartWidth + diff + 'px';
-}
+
+// function mousemove(e) {
+//   // console.log('mouse move... x:', e.pageX, 'y:', e.pageY);
+//   var diff = mouseStartPosition.x - e.pageX;
+//     v1.style.flexBasis = v1StartWidth + -1*diff + 'px';
+//     v2.style.flexBasis = v2StartWidth + diff + 'px';
+//     viewPlot.plot(viewPlot);
+// }
+
+    function mousemove(e) {
+        // console.log('mouse move... x:', e.pageX, 'y:', e.pageY);
+        let diff = mouseStartPosition.x - e.pageX;
+        if((v2StartWidth + diff) < 550){
+            return false;
+        }
+        v1.style.flexBasis = v1StartWidth + -1*diff + 'px';
+        v2.style.flexBasis = v2StartWidth + diff + 'px';
+        viewPlot.plot(viewPlot);
+    }
+
+
 
 function mouseup(e) {
-  window.removeEventListener("mousemove", mousemove);
-  window.removeEventListener("mouseup", mouseup);
+  document.removeEventListener("mousemove", mousemove);
+  document.removeEventListener("mouseup", mouseup);
 }
 
 
