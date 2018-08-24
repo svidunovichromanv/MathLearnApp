@@ -12,22 +12,23 @@
 <body>
 <div class="like" ><p></p><i class="far fa-smile-beam"></i></div>
 <div class="dislike"><p></p><i class="far fa-smile-wink"></i></div>
-
+<div class="demo-2 spinner "></div>
 <div class="container">
   <div class="header">
     <i class="fas fa-bars button-burger-menu" onclick="showSideMenu(event)"></i>
     <h1> <i class="fas fa-graduation-cap"></i> math learn</h1>
   </div>
+  <div class="dimmer"></div>
   <div class="side-menu hidden" id="side-menu">
     <span style="flex-grow: 2"></span>
-    <span id="0"><a href="#1">1.линейная функция</a></span>
-    <span id="1"><a href="#2">2.линейная функция</a></span>
-    <span id="2"><a href="#3">3.линейная функция</a></span>
-    <span id="3"><a href="#4">4.линейная функция</a></span>
-    <span id="4"><a href="#5">5.линейная функция</a></span>
-    <span id="5"><a href="#6">6.линейная функция</a></span>
-    <span id="6"><a href="#7">7.линейная функция</a></span>
-    <span id="7"><a href="#8">8.линейная функция</a></span>
+    <span class="cl"><a href="#1">Урок№1</a></span>
+    <span class="cl"><a href="#2">Урок№2</a></span>
+    <span class="cl"><a href="#3">Урок№3</a></span>
+    <span class="cl"><a href="#4">Урок№4</a></span>
+    <span class="cl"><a href="#5">Урок№5</a></span>
+    <span class="cl"><a href="#6">Урок№6</a></span>
+    <span class="cl"><a href="#7">Урок№7</a></span>
+    <span class="cl"><a href="#8">Урок№8</a></span>
     <span style="flex-grow: 5"></span>
   </div>
   <div class="columns">
@@ -45,10 +46,8 @@
           <span class="inputField"></span>
           <span class="btn-delete-input"><i class="fas fa-times"></i></span>
         </div>
-        <div class="btn-addNewField" id="btn-add-item"><i class="fas fa-plus"></i>
-
-        </div>
-
+        <div class="btn-addNewField" id="btn-add-item"><i class="fas fa-plus"></i></div>
+        <input id ="focus" type="hidden">
       </div>
       <div id="plot" class="container-right"></div>
       <div id="calculator">
@@ -178,9 +177,9 @@ import {viewPlot} from './js/plot/indexPlot.js';
     const v2 = document.querySelector('.column-two');
     const r1_lr_handle = document.querySelector('.button-resize');
 
-    var mouseStartPosition = {};
-    var v1StartWidth;
-    var v2StartWidth;
+    let mouseStartPosition = {};
+    let v1StartWidth;
+    let v2StartWidth;
 
     r1_lr_handle.addEventListener("mousedown", mousedownR1RL);
 
@@ -194,9 +193,10 @@ function mousedownR1RL(e) {
 
 
   // add listeners for mousemove, mouseup
-  window.addEventListener("mousemove", mousemove);
-  window.addEventListener("mouseup", mouseup);
+  document.addEventListener("mousemove", mousemove);
+  document.addEventListener("mouseup", mouseup);
 }
+
 
 function mousemove(e) {
   // console.log('mouse move... x:', e.pageX, 'y:', e.pageY);
@@ -206,9 +206,22 @@ function mousemove(e) {
     viewPlot.plot(viewPlot);
 }
 
+    function mousemove(e) {
+        // console.log('mouse move... x:', e.pageX, 'y:', e.pageY);
+        let diff = mouseStartPosition.x - e.pageX;
+        if((v2StartWidth + diff) < 550){
+            return false;
+        }
+        v1.style.flexBasis = v1StartWidth + -1*diff + 'px';
+        v2.style.flexBasis = v2StartWidth + diff + 'px';
+        viewPlot.plot(viewPlot);
+    }
+
+
+
 function mouseup(e) {
-  window.removeEventListener("mousemove", mousemove);
-  window.removeEventListener("mouseup", mouseup);
+  document.removeEventListener("mousemove", mousemove);
+  document.removeEventListener("mouseup", mouseup);
 }
 
 
@@ -221,22 +234,22 @@ function mouseup(e) {
     const menu = document.getElementById('side-menu');
 
     function showSideMenu(e){
-     let btn = null;
-
+   	 let btn = null;
      if(!e){
          btn = document.querySelector('.fa-times');
      }
      else{
          btn = e.target;
      }
-
         menu.classList.toggle('hidden');
-        const widthMenu = menu.offsetWidth;
-        btn.setAttribute('style', 'transform:translateX('+ (widthMenu - btn.offsetWidth) +'px);');
+        btn.setAttribute('style', 'transform:translateX(20px);z-index:201;');
         btn.classList.toggle('fa-bars');
         btn.classList.toggle('fa-times');
-
+        if(!menu.classList.contain('hidden')){
+        	console.log('hello')
+        }
     }
+
     //показать галочку за правильное решение;
     /*function showLike() {
         const like = document.querySelector('.like');
@@ -249,6 +262,12 @@ function mouseup(e) {
             like.style.display = 'none';
         },1500);
     }*/
+
+//     document.addEventListener('click', function(event) {
+//     if (event.target.closest(".burger_trigger").length ) return;
+//     $('.menu').removeClass('menu_opened');
+//     event.stopPropagation();
+// });
 
 
 

@@ -280,11 +280,10 @@ h2 {
 
 .side-menu{
     position: absolute;
-    z-index: 100;
+    z-index: 200;
     left: 0;
     top:0;
     background: #4dd959;
-    color: #e38b00;
     width: 20%;
     height: 100vh;
     border-right:solid #53b987 2px;
@@ -317,14 +316,14 @@ h2 {
     right: 0;
     display: none;
     color: #0819b9;
-    background: rgba(255, 255, 255, 0.72);
-
+    background: rgba(255, 255, 255, 0.86);
 }
 .like i{
     font-size: 80px;
     color: #4dd959;
-    transition: .5s font-size;
+    transition: .5s all;
 }
+
 .dislike{
     position: fixed;
     align-items: center;
@@ -336,11 +335,12 @@ h2 {
     right: 0;
     display: none;
     color: #ff827e;
-    background: rgba(255, 255, 255, 0.72);
+    background: rgba(255, 255, 255, 0.86);
+    white-space: pre;
 }
 .dislike i{
     color: #ff9d21;
-    transition: .5s font-size;
+    transition: .5s all;
 }
 #btn-next,#btn-check{
     border: none;
@@ -373,16 +373,32 @@ h2 {
     color: #ff9800;
     font-size: 20px;
 }
+#side-menu > span > a{
+    color: #e38b00;
+    font-size: 22px;
+    text-decoration: none;
+    font-family: 'Modern Antiqua', cursive;
+    border-radius: 10px;
+    border:dotted 2px #e38b00;
+    padding:20px 40px;
+    background: #3cd977;
+    transition: .3s background-color;
+}
+#side-menu > span > a:hover {
+    background: #e3ffc0;
+}
+div.header > i{
+    color: #ff9800;
+}
 
 @media(max-width: 1245px) {
     .columns {
         flex-direction: column;
         margin: 0 auto;
     }
-/*    .column-two {
-        flex-direction: column;
-    }*/
-
+    .side-menu{
+        width: 50%;
+    }
     .column-one {
         border-bottom: 1px solid #c6c6c6;
     }
@@ -391,7 +407,51 @@ h2 {
     }
     
     .container-left, .container-right {
+        height: auto;
+    }
+}
+
+@media(max-width: 600px) {
+    .inputField{
+        font-size: 19px;
+    }
+    .button-keypad-toggle,#calculator{
+        display: none;
+    }
+    body > div.container > div.header > h1{
+        margin: 40px;
+    }
+    .side-menu{
+        width:100%;
+    }
+    .column-two{
+        flex-direction: column;
+    }
+    .container-right {
+        height: 500px;
         width: 100%;
     }
+    .container-left{
+        width: 100%;
+    }
+
+}
+
+.dimmer {
+    position: relative;
+}
+
+.dimmer::before {
+  z-index: 9001;
+  cursor: pointer;
+  display: none;
+  position: fixed;
+  content: '';
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: rgba(65, 65, 65, 0.15);
+
 }
 
