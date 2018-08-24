@@ -37,7 +37,7 @@ export class ModelPlot{
                             }
                         }
                     }
-                    this.expr = math.compile("x+2"/*arr.join("")*/);
+                    this.expr = math.compile(arr.join(""));
                     if (this.expression[i][key][0] === "x" && this.expression[i][key][1] === "=") {
                         this.yValues = math.range(firstX, lastX, 0.1).toArray();
                         this.xValuesAll = this.yValues.map((y) => {
