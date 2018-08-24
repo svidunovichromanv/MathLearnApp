@@ -232,6 +232,9 @@ function mouseup(e) {
         btn.setAttribute('style', 'transform:translateX(20px);z-index:201;');
         btn.classList.toggle('fa-bars');
         btn.classList.toggle('fa-times');
+        if(!menu.classList.contain('hidden')){
+        	console.log('hello')
+        }
     }
 
     //показать галочку за правильное решение;
@@ -246,6 +249,12 @@ function mouseup(e) {
             like.style.display = 'none';
         },1500);
     }*/
+
+//     document.addEventListener('click', function(event) {
+//     if (event.target.closest(".burger_trigger").length ) return;
+//     $('.menu').removeClass('menu_opened');
+//     event.stopPropagation();
+// });
 
 
 
