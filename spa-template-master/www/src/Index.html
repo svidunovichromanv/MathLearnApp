@@ -21,14 +21,14 @@
   <div class="dimmer"></div>
   <div class="side-menu hidden" id="side-menu">
     <span style="flex-grow: 2"></span>
-    <span class="cl"><a href="#1">Урок№1</a></span>
-    <span class="cl"><a href="#2">Урок№2</a></span>
-    <span class="cl"><a href="#3">Урок№3</a></span>
-    <span class="cl"><a href="#4">Урок№4</a></span>
-    <span class="cl"><a href="#5">Урок№5</a></span>
-    <span class="cl"><a href="#6">Урок№6</a></span>
-    <span class="cl"><a href="#7">Урок№7</a></span>
-    <span class="cl"><a href="#8">Урок№8</a></span>
+    <span class="cl"><a id='1' href="#1">Урок№1</a></span>
+    <span class="cl"><a id='2' href="#2">Урок№2</a></span>
+    <span class="cl"><a id='3' href="#3">Урок№3</a></span>
+    <span class="cl"><a id='4' href="#4">Урок№4</a></span>
+    <span class="cl"><a id='5' href="#5">Урок№5</a></span>
+    <span class="cl"><a id='6' href="#6">Урок№6</a></span>
+    <span class="cl"><a id='7' href="#7">Урок№7</a></span>
+    <span class="cl"><a id='8' href="#8">Урок№8</a></span>
     <span style="flex-grow: 5"></span>
   </div>
   <div class="columns">
@@ -198,13 +198,14 @@ function mousedownR1RL(e) {
 }
 
 
-// function mousemove(e) {
-//   // console.log('mouse move... x:', e.pageX, 'y:', e.pageY);
-//   var diff = mouseStartPosition.x - e.pageX;
-//     v1.style.flexBasis = v1StartWidth + -1*diff + 'px';
-//     v2.style.flexBasis = v2StartWidth + diff + 'px';
-//     viewPlot.plot(viewPlot);
-// }
+
+function mousemove(e) {
+  // console.log('mouse move... x:', e.pageX, 'y:', e.pageY);
+  var diff = mouseStartPosition.x - e.pageX;
+    v1.style.flexBasis = v1StartWidth + -1*diff + 'px';
+    v2.style.flexBasis = v2StartWidth + diff + 'px';
+    viewPlot.plot(viewPlot);
+}
 
     function mousemove(e) {
         // console.log('mouse move... x:', e.pageX, 'y:', e.pageY);
