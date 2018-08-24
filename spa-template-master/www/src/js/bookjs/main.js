@@ -71,7 +71,7 @@ var renderingText = function(data) {
 function goToNextPage() {
         let menu = document.querySelector('.side-menu');
         hash = window.location.hash.charAt(1);
-  makeRequest('GET', hash + '.json').then(successCallbackFunction)
+  makeRequest('GET', hash + '.json').then(renderingText)
 }
 
 
