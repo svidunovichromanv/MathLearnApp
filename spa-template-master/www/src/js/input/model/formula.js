@@ -7,7 +7,7 @@ import { Validator } from './validator.js';
     constructor(validator) {
         super();
         this.data = [{'line-input':[]}];
-        this.maxlength = 15;
+        this.maxlength = 16;
         this.stateData = false;
         if (validator instanceof Validator) {
             this.validator = validator;
