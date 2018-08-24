@@ -12,16 +12,55 @@ import { formula } from "../input/index.js";
 
     window.addEventListener("hashchange", goToNextPage);
 
-    function goToNextPage(e) {
-        let menu = document.querySelector('.side-menu');
-        let xhr = new XMLHttpRequest;
-        let id = e.target.id;
-        if(!id) return false;
-        xhr.open('GET', id + '.json', true);
-        xhr.send();
-        xhr.onreadystatechange = function () {
-            if (this.readyState === 4 && this.status === 200) {
-                let text = JSON.parse(this.responseText);
+
+    // function goToNextPage() {
+    //     let menu = document.querySelector('.side-menu');
+    //     const xhr = new XMLHttpRequest;
+    //     hash = window.location.hash.charAt(1);
+    //     xhr.open('GET', '' + hash + '.json', true);
+    //     xhr.send();
+    //     xhr.onreadystatechange = function () {
+    //         if (this.readyState === 4 && this.status === 200) {
+    //             let text = JSON.parse(this.responseText);
+    //             parseText(text);
+    //             formula.setData(text["equation"]);
+    //             if(!menu.classList.contains('hidden')){
+    //                 document.querySelector('.side-menu').classList.add('hidden');
+    //                 document.querySelector('.button-burger-menu').classList.toggle('fa-bars');
+    //                 document.querySelector('.button-burger-menu').classList.toggle('fa-times');
+    //             }
+    //         }
+    //     }
+    // }
+
+
+function makeRequest (method, url) {
+  return new Promise(function (resolve, reject) {
+    var xhr = new XMLHttpRequest();
+    xhr.open(method, url);
+    xhr.onload = function () {
+      if (this.status >= 200 && this.status < 300) {
+        resolve(xhr.response);
+      } else {
+        reject({
+          status: this.status,
+          statusText: xhr.statusText
+        });
+      }
+    };
+    xhr.onerror = function () {
+      reject({
+        status: this.status,
+        statusText: xhr.statusText
+      });
+    };
+    xhr.send();
+  });
+}
+
+var renderingText = function(data) {
+    let text = JSON.parse(data);
+
                 parseText(text);
                 answer = text.answer;
                 formula.setData(text["equation"]);
@@ -30,9 +69,17 @@ import { formula } from "../input/index.js";
                     document.querySelector('.button-burger-menu').classList.toggle('fa-bars');
                     document.querySelector('.button-burger-menu').classList.toggle('fa-times');
                 }
-            }
-        }
-    }
+}
+
+
+function goToNextPage() {
+        let menu = document.querySelector('.side-menu');
+        hash = window.location.hash.charAt(1);
+  makeRequest('GET', hash + '.json').then(successCallbackFunction)
+}
+
+
+
 
     function theory() {
         if(!window.location.hash){
@@ -90,9 +137,10 @@ export function checkAnswer(e){
 
     function isTrueAnswer(result, answer) {
         let answerFromData = getAnswerFromData(result);
+
+        if(answerFromData.length !== answer.length)return false;
         console.log(answerFromData);
         console.log(answer);
-        if(answerFromData.length !== answer.length)return false;
         for(let i=0;i<answerFromData.length;i++){
             if(answerFromData[i].localeCompare(answer[i]) !== 0){
                 return false;
@@ -212,4 +260,23 @@ function getRandomInt(min, max)
 {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+    
+    const burger = document.querySelector('.button-burger-menu');
 
+   const menu = document.getElementById('side-menu');
+
+    function showSideMenu(e){
+     let btn = null;
+     if(!e){
+         btn = document.querySelector('.fa-times');
+     }
+     else{
+         btn = e.target;
+     }
+        menu.classList.toggle('hidden');
+        btn.setAttribute('style', 'transform:translateX(20px);z-index:201;');
+        btn.classList.toggle('fa-bars');
+        btn.classList.toggle('fa-times');
+  
+    }
+burger.addEventListener('click', showSideMenu);
