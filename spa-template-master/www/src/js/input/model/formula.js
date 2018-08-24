@@ -7,7 +7,7 @@ import { Validator } from './validator.js';
     constructor(validator) {
         super();
         this.data = [{'line-input':[]}];
-        this.maxlength = 18;
+        this.maxlength = 15;
         this.stateData = false;
         if (validator instanceof Validator) {
             this.validator = validator;
@@ -27,10 +27,10 @@ import { Validator } from './validator.js';
          }
      }
      setData(data) {
+         //пример для теста data = [["y","=","3","*","x","^2"],["y","=","0",".","5","*","x","^2"]];
          this.emit('setData', data);
          this.emit('change', this.data);
      }
-
      saveData(id, data){
          let item = this.getItem(id);
          if(item) {
@@ -45,10 +45,8 @@ import { Validator } from './validator.js';
          else{
              let newItem = {[id]: data};
              this.data.push(newItem);
-             console.log(this.data);
          }
      }
-
      clearData(){
          this.data = [{'line-input':[]}];
      }
@@ -60,7 +58,6 @@ import { Validator } from './validator.js';
     }
 
     addDataInItem(id,index, data) {
-        console.log(this.data);
         const item = this.getItem(id);
         if(item.length >= this.maxlength)return false;
         this.validateData(data);   //проверяем введенные данные и если они true добавляем в массив
