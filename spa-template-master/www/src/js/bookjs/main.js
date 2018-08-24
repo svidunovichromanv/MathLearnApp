@@ -18,9 +18,8 @@ import { formula } from "../input/index.js";
     window.addEventListener("hashchange", myFunction);
 
     function myFunction(e) {
-    let link = e.target;
-    console.log(link);
-    var hash = window.location.hash.charAt(1);
+    let menu = e.currentTarget;
+    let hash = window.location.hash.charAt(1);
     const xhr = new XMLHttpRequest;
         xhr.open('GET', ''+hash+'.json', true);
         xhr.send();
@@ -29,7 +28,9 @@ import { formula } from "../input/index.js";
                 let text = JSON.parse(this.responseText);
                 parseText(text);
                 formula.setData(text["equation"]);
-
+                menu.classList.toggle('hidden');
+                document.querySelector('.button-burger-menu').classList.toggle('fa-bars');
+                document.querySelector('.button-burger-menu').classList.toggle('fa-times');
             }
         };
 }
@@ -90,6 +91,9 @@ export function checkAnswer(e){
             if(answer == check){
                 showLike();
                 hash++;
+                if(hash == 9){
+                    hash = 1;
+                }
                 window.location.hash = hash;
                 parseText(text);
                 formula.setData(text["equation"]);
@@ -100,6 +104,9 @@ export function checkAnswer(e){
             if(btn.id == 'btn-next'){
                 showDislike();
                 hash++;
+                if(hash == 9){
+                    hash = 1;
+                }
                 window.location.hash = hash;
                 parseText(text);
                 formula.setData(text["equation"]);
@@ -245,33 +252,50 @@ function mouseup(e) {
         btn.classList.toggle('fa-times');
  }*/
 //показать галочку за правильное решшение;
+function getFontSize() {
+
+    if(window.innerWidth < 1245 && window.innerWidth > 600){
+        return  60;
+    }
+    else if(window.innerWidth < 600){
+        return 40;
+    }
+    else if(window.innerWidth < 300){
+        return 25;
+    }
+    return 100;
+}
+
  function showLike() {
    const like = document.querySelector('.like');
    const message = generateMessage('like');
+   let fontSizeForLike = getFontSize();
      like.querySelector('p').innerHTML = message;
     like.style.display = 'flex';
      setTimeout(function () {
-         like.querySelector('i').style.fontSize = '150px';
-         like.style.fontSize = '100px';
+         like.querySelector('i').style.fontSize = fontSizeForLike +'px';
+         like.style.fontSize = fontSizeForLike +'px';
      },10);
      setTimeout(function () {
-         like.querySelector('i').style.fontSize = '20px';
+         like.querySelector('i').style.fontSize = '1px';
          like.style.display = 'none';
      },1500);
  }
 
 function showDislike() {
+
+    let fontSizeForLike = getFontSize();
     const dislike = document.querySelector('.dislike');
     const message = generateMessage();
     dislike.querySelector('p').innerHTML = message;
     dislike.style.display = 'flex';
     console.log(message);
     setTimeout(function () {
-         dislike.querySelector('i').style.fontSize = '150px';
-        dislike.style.fontSize = '100px';
+         dislike.querySelector('i').style.fontSize = fontSizeForLike +'px';
+        dislike.style.fontSize = fontSizeForLike +'px';
      },10);
      setTimeout(function () {
-         dislike.querySelector('i').style.fontSize = '20px';
+         dislike.querySelector('i').style.fontSize = '1px';
          dislike.style.display = 'none';
      },1500);
 
@@ -287,7 +311,7 @@ function generateMessage(type) {
 
      }
      else{
-         messages = ['В другой раз получиться!','Ты можешь лучше!','Попробуй еще раз!','Надо сосредоточиться!','Мы в тебя верим!','Тяжело в ученье , легко в бою!'];
+         messages = ['В другой раз получиться!','Ты можешь лучше!','Попробуй еще раз!','Надо сосредоточиться!','Мы в тебя верим!','Тяжело в ученье\n легко в бою!'];
          quantityOfMessages = messages.length-1;
 
      }
