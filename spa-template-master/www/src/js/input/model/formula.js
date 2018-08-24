@@ -26,8 +26,8 @@ import { Validator } from './validator.js';
              }
          }
      }
+
      setData(data) {
-         //пример для теста data = [["y","=","3","*","x","^2"],["y","=","0",".","5","*","x","^2"]];
          this.emit('setData', data);
          this.emit('change', this.data);
      }
@@ -67,6 +67,7 @@ import { Validator } from './validator.js';
                 this.emit('change', this.data);
             }
             else{
+                console.log(index);
                 let newArray = [];
                 for(let i=0;i<index;i++){
                     newArray.push(item[i]);
@@ -85,7 +86,7 @@ import { Validator } from './validator.js';
          for (let i = 0; i < this.data.length; i++) {
              for (let k in this.data[i]) {
                  if (k === id) {
-                     this.data.splice(this.data[i], 1);
+                     this.data.splice(i, 1);
                      let newData = {};
                      newData[id] = newArray;
                      this.data.push(newData);
