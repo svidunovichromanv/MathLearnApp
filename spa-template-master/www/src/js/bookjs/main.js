@@ -12,7 +12,6 @@ import { formula } from "../input/index.js";
 
     window.addEventListener("hashchange", goToNextPage);
 
-
     // function goToNextPage() {
     //     let menu = document.querySelector('.side-menu');
     //     const xhr = new XMLHttpRequest;
@@ -60,9 +59,7 @@ function makeRequest (method, url) {
 
 var renderingText = function(data) {
     let text = JSON.parse(data);
-
                 parseText(text);
-                answer = text.answer;
                 formula.setData(text["equation"]);
                 if(!menu.classList.contains('hidden')){
                     document.querySelector('.side-menu').classList.add('hidden');
@@ -71,11 +68,10 @@ var renderingText = function(data) {
                 }
 }
 
-
 function goToNextPage() {
         let menu = document.querySelector('.side-menu');
         hash = window.location.hash.charAt(1);
-  makeRequest('GET', hash + '.json').then(successCallbackFunction)
+  makeRequest('GET', hash + '.json').then(renderingText)
 }
 
 
@@ -86,7 +82,6 @@ function goToNextPage() {
             window.location.hash = 1;
         }
         const xhr = new XMLHttpRequest;
-        console.log(hash);
         xhr.open('GET', ''+hash+'.json', true);
         xhr.send();
         xhr.onreadystatechange = function() {
@@ -107,23 +102,15 @@ export function checkAnswer(e){
     xhr.open('GET', ''+hash+'.json', true);
     xhr.send();
     let btn = e.target;
-    hash++;
-    if(hash == 9){
-        hash = 8;
-    }
     xhr.onreadystatechange = function() {
         if(this.readyState === 4 && this.status === 200) {
             let text = JSON.parse(this.responseText);
             if( isTrueAnswer(data, answer) ){
                 showLike();
-
-                window.location.hash = hash;
-                answer = text.answer;
-                parseText(text);
-                formula.setData(text["equation"]);
-            }
-            else if(btn.id == 'btn-next'){
-                showDislike();
+                hash++;
+                if(hash == 9){
+                    hash = 1;
+                }
                 window.location.hash = hash;
                 answer = text.answer;
                 parseText(text);
@@ -132,12 +119,22 @@ export function checkAnswer(e){
             else{
                 showDislike();
             }
+            if(btn.id == 'btn-next'){
+                showDislike();
+                hash++;
+                if(hash == 9){
+                    hash = 1;
+                }
+                window.location.hash = hash;
+                answer = text.answer;
+                parseText(text);
+                formula.setData(text["equation"]);
+            }
         }
     };
 
     function isTrueAnswer(result, answer) {
         let answerFromData = getAnswerFromData(result);
-
         if(answerFromData.length !== answer.length)return false;
         console.log(answerFromData);
         console.log(answer);

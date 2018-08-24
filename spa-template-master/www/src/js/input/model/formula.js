@@ -7,7 +7,7 @@ import { Validator } from './validator.js';
     constructor(validator) {
         super();
         this.data = [{'line-input':[]}];
-        this.maxlength = 18;
+        this.maxlength = 15;
         this.stateData = false;
         if (validator instanceof Validator) {
             this.validator = validator;
@@ -28,11 +28,9 @@ import { Validator } from './validator.js';
      }
 
      setData(data) {
-        console.log(data);
          this.emit('setData', data);
          this.emit('change', this.data);
      }
-
      saveData(id, data){
          let item = this.getItem(id);
          if(item) {
@@ -47,10 +45,8 @@ import { Validator } from './validator.js';
          else{
              let newItem = {[id]: data};
              this.data.push(newItem);
-             console.log(this.data);
          }
      }
-
      clearData(){
          this.data = [{'line-input':[]}];
      }
