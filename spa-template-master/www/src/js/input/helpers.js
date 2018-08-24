@@ -27,6 +27,3 @@ export class EventEmitter{
     }
 }
 
-export function view(data) {
-    console.log(data);
-}
