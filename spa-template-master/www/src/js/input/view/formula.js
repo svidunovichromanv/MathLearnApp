@@ -50,7 +50,8 @@ export class FormulaViewInput extends EventEmitter {
     editField(event) {
         let activeField = document.querySelector('.activeField');
         let newActiveField = event.target.parentNode;
-
+        let hiddenField = document.querySelector('input');
+        hiddenField.focus();
         if (newActiveField.classList.contains('line-input')) {
 
             let inputField = newActiveField.querySelector('.inputField');
@@ -63,6 +64,7 @@ export class FormulaViewInput extends EventEmitter {
             inputField.appendChild(this.caret.value);
         }
         else if (activeField && !find(event.path, ['input-form', 'calculator', 'btn-calculator'])) {
+            hiddenField.blur();
             activeField.classList.remove('activeField');
             activeField.querySelector('.inputField').removeChild((this.caret.value));
         }
@@ -98,6 +100,8 @@ export class FormulaViewInput extends EventEmitter {
                 this.emit('keydownArrow', 'right');
             }
             if (keyCode == 8) {
+                event.preventDefault();
+                event.stopPropagation();
                 if (this.caret.value.previousElementSibling) { //проверяем есть ли что удалять
                     let id = this.form.querySelector('.activeField').id;
                     let deletedNode = this.caret.value.previousElementSibling;
