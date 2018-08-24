@@ -138,12 +138,19 @@ export function checkAnswer(e){
         if(answerFromData.length !== answer.length)return false;
         console.log(answerFromData);
         console.log(answer);
-        for(let i=0;i<answerFromData.length;i++){
-            if(answerFromData[i].localeCompare(answer[i]) !== 0){
-                return false;
+        let check = 0;
+        for(let i=0;i<answer.length;i++){
+            for(let j=0;j<answerFromData.length;j++){
+                if(answerFromData[j].localeCompare(answer[i]) === 0){
+                    check ++;
+                }
             }
+            if(!check)return false;
         }
-        return true;
+        if(check === answer.length){
+            return true;
+        }
+        else return false;
     }
 
     function getAnswerFromData(data){
