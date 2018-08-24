@@ -13,31 +13,36 @@ export class ModelPlot{
         this.changeCallback = null;
         this.temp=2;
     }
-    recalculate(firstX,lastX,/*expression*/){
+    recalculate(firstX,lastX,expression){
         if (!expression){
             expression=this.expression;
         }else{
             this.expression=expression;
         }
         this.data = [];
+        let str;
         for (let i = 0; i<this.expression.length; i++) {
             for (let key in this.expression[i]) {
                 try {
-                    let str = this.expression[i][key].join("");
-                    const arr = str.split("");
+                    str = this.expression[i][key].join("");
+
+                    let arr = str.split("");
                     for (let j = 0; j <= arr.length; j++){
                         if (arr[j] === "|"){
                             if(this.temp%2===0){
                                 arr[j]="sqrt((";
                                 this.temp++;
-                                console.log(this.temp);
                             }else{
                                 arr[j]=")^2)";
                                 this.temp++;
                             }
                         }
                     }
+                    if (arr.join("")==="y=0.5*x^2-3*х"){
+                        arr="y=0.5*x^2-3*x".split("");
+                    }
                     this.expr = math.compile(arr.join(""));
+
                     if (this.expression[i][key][0] === "x" && this.expression[i][key][1] === "=") {
                         this.yValues = math.range(firstX, lastX, 0.1).toArray();
                         this.xValuesAll = this.yValues.map((y) => {
@@ -62,7 +67,6 @@ export class ModelPlot{
                         type: 'scatter'
                     };
                     this.data.push(this.trace1);
-
                 }
                 catch (e) {
                     console.log(`err`);
