@@ -35,6 +35,7 @@ import { formula } from "../input/index.js";
 }
 
     function theory() {
+        hash = 1;
         window.location.hash = 1;
         const xhr = new XMLHttpRequest;
         xhr.open('GET', ''+hash+'.json', true);
@@ -73,6 +74,7 @@ import { formula } from "../input/index.js";
      }*/
 
 export function checkAnswer(e){
+    hash = window.location.hash.charAt(1);
     const xhr = new XMLHttpRequest;
     const data = formula.getData();
     let check = getAnswerFromData(data);
