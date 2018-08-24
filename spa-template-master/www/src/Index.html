@@ -111,7 +111,7 @@
 </div>
 
 
-<script>
+<script type="module">
     /*document.addEventListener('DOMContentLoaded', theory);
     const area = document.querySelector('.area');
     let page = 0;
@@ -171,7 +171,7 @@
         }
     }*/
 
-
+import {viewPlot} from './js/plot/indexPlot.js';
 //resizer
     const v1 = document.querySelector('.column-one');
     const v2 = document.querySelector('.column-two');
@@ -197,6 +197,15 @@ function mousedownR1RL(e) {
   document.addEventListener("mouseup", mouseup);
 }
 
+
+function mousemove(e) {
+  // console.log('mouse move... x:', e.pageX, 'y:', e.pageY);
+  var diff = mouseStartPosition.x - e.pageX;
+    v1.style.flexBasis = v1StartWidth + -1*diff + 'px';
+    v2.style.flexBasis = v2StartWidth + diff + 'px';
+    viewPlot.plot(viewPlot);
+}
+
     function mousemove(e) {
         // console.log('mouse move... x:', e.pageX, 'y:', e.pageY);
         let diff = mouseStartPosition.x - e.pageX;
@@ -205,7 +214,9 @@ function mousedownR1RL(e) {
         }
         v1.style.flexBasis = v1StartWidth + -1*diff + 'px';
         v2.style.flexBasis = v2StartWidth + diff + 'px';
+        viewPlot.plot(viewPlot);
     }
+
 
 
 function mouseup(e) {
