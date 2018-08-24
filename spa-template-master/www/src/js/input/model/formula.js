@@ -26,7 +26,9 @@ import { Validator } from './validator.js';
              }
          }
      }
+
      setData(data) {
+        console.log(data);
          this.emit('setData', data);
          this.emit('change', this.data);
      }
@@ -60,7 +62,6 @@ import { Validator } from './validator.js';
     }
 
     addDataInItem(id,index, data) {
-        console.log(this.data);
         const item = this.getItem(id);
         if(item.length >= this.maxlength)return false;
         this.validateData(data);   //проверяем введенные данные и если они true добавляем в массив
@@ -70,6 +71,7 @@ import { Validator } from './validator.js';
                 this.emit('change', this.data);
             }
             else{
+                console.log(index);
                 let newArray = [];
                 for(let i=0;i<index;i++){
                     newArray.push(item[i]);
@@ -88,7 +90,7 @@ import { Validator } from './validator.js';
          for (let i = 0; i < this.data.length; i++) {
              for (let k in this.data[i]) {
                  if (k === id) {
-                     this.data.splice(this.data[i], 1);
+                     this.data.splice(i, 1);
                      let newData = {};
                      newData[id] = newArray;
                      this.data.push(newData);
