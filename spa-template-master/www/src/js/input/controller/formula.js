@@ -17,6 +17,7 @@ export class FormulaController {
         keypadView.on('showKeypad', this.showKeypad.bind(this));
         formula.on('setData', this.setData.bind(this));
     }
+
     setData(data) {
         let id = 'line-input';
         this.formulaViewInput.clearData();
@@ -31,13 +32,16 @@ export class FormulaController {
     showKeypad(){
         this.keypad.showKeypad();
     }
+
     moveCaret(direction){
         this.formulaViewInput.moveCaret(direction);
     }
+
     cleanInput(id){
         this.formula.cleanItem(id);
         this.formulaViewInput.cleanInput();
     }
+
     addNewInput(){
         if(this.formula.data.length === 5)return false;
         let idInput = Date.now();
@@ -56,8 +60,7 @@ export class FormulaController {
 
     addData(data) {
         let activeField = document.querySelector('.activeField');
-        if (activeField) {
-
+        if (activeField){
             if (data === '^') {
                 this.memberItem += data;
                 return false;
@@ -95,7 +98,6 @@ export class FormulaController {
             else {
                 let id = activeField.id;
                 let index = this.formulaViewInput.getNextIndexItem();
-                
                 const result = this.formula.addDataInItem(id, index, data);
 
                 if (result) {
