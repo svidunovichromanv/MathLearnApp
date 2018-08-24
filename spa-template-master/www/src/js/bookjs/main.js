@@ -36,8 +36,8 @@ import { formula } from "../input/index.js";
 }
 
     function theory() {
-        hash = 1;
-        window.location.hash = 1;
+        // hash = 1;
+        // window.location.hash = 1;
         const xhr = new XMLHttpRequest;
         xhr.open('GET', ''+hash+'.json', true);
         xhr.send();
